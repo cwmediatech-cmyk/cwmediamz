@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Conta - Cine Way</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#090909;
+color:white;
+font-family:Arial, Helvetica, sans-serif;
+padding-bottom:95px;
+}
+
+/* HEADER */
+
+header{
+height:240px;
+background:
+linear-gradient(to bottom,
+rgba(0,0,0,.4),
+rgba(0,0,0,.95)),
+url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200");
+background-size:cover;
+background-position:center;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:20px;
+position:relative;
+}
+
+.avatar{
+width:95px;
+height:95px;
+border-radius:50%;
+background:linear-gradient(135deg,#ff7a18,#ffb347);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:40px;
+box-shadow:0 0 30px rgba(255,122,24,.4);
+border:3px solid rgba(255,255,255,.15);
+}
+
+.username{
+margin-top:15px;
+font-size:22px;
+font-weight:bold;
+}
+
+.userid{
+margin-top:6px;
+font-size:13px;
+color:#bbb;
+}
+
+/* PREMIUM STATUS */
+
+.status-box{
+margin-top:15px;
+padding:10px 18px;
+border-radius:30px;
+font-size:13px;
+font-weight:bold;
+}
+
+.status-free{
+background:#202020;
+color:#aaa;
+border:1px solid #333;
+}
+
+.status-premium{
+background:linear-gradient(135deg,#ff7a18,#ffb347);
+color:#111;
+}
+
+/* CONTAINER */
+
+.container{
+padding:18px;
+display:flex;
+flex-direction:column;
+gap:14px;
+}
+
+/* SECTION TITLE */
+
+.section-title{
+font-size:15px;
+color:#ff7a18;
+margin-top:10px;
+margin-bottom:4px;
+font-weight:bold;
+}
+
+/* CARD */
+
+.card{
+background:#151515;
+border-radius:18px;
+padding:18px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+cursor:pointer;
+transition:.25s;
+border:1px solid rgba(255,255,255,.04);
+}
+
+.card:hover{
+transform:translateY(-2px);
+background:#1b1b1b;
+}
+
+.card-left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.card-icon{
+width:45px;
+height:45px;
+border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+background:#242424;
+color:#ff7a18;
+}
+
+.card-info h4{
+font-size:15px;
+margin-bottom:4px;
+}
+
+.card-info p{
+font-size:12px;
+color:#999;
+}
+
+/* PREMIUM CARD */
+
+.vip{
+background:
+linear-gradient(135deg,
+rgba(255,122,24,.15),
+rgba(255,179,71,.07));
+border:1px solid rgba(255,122,24,.35);
+}
+
+.vip .card-icon{
+background:rgba(255,122,24,.15);
+color:#ffb347;
+}
+
+.vip h4{
+color:#ffb347;
+}
+
+/* BADGE */
+
+.badge{
+background:red;
+padding:4px 8px;
+border-radius:8px;
+font-size:10px;
+font-weight:bold;
+margin-left:8px;
+}
+
+/* STORAGE */
+
+.storage{
+background:#151515;
+padding:18px;
+border-radius:18px;
+}
+
+.storage-top{
+display:flex;
+justify-content:space-between;
+margin-bottom:12px;
+font-size:13px;
+}
+
+.progress{
+height:10px;
+background:#222;
+border-radius:30px;
+overflow:hidden;
+}
+
+.progress div{
+width:40%;
+height:100%;
+background:linear-gradient(90deg,#ff7a18,#ffb347);
+border-radius:30px;
+}
+
+/* NAVBAR */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:75px;
+background:#111;
+display:flex;
+justify-content:space-around;
+align-items:center;
+border-top:1px solid rgba(255,255,255,.05);
+z-index:20;
+}
+
+.bottom-nav a{
+color:#888;
+font-size:11px;
+display:flex;
+flex-direction:column;
+align-items:center;
+text-decoration:none;
+gap:5px;
+}
+
+.bottom-nav a i{
+font-size:20px;
+}
+
+.bottom-nav a.active{
+color:#ff7a18;
+}
+
+/* POPUP */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.82);
+backdrop-filter:blur(4px);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+padding:20px;
+}
+
+.popup-box{
+background:#151515;
+width:100%;
+max-width:380px;
+border-radius:24px;
+padding:22px;
+position:relative;
+animation:popup .25s ease;
+border:1px solid rgba(255,255,255,.05);
+}
+
+@keyframes popup{
+from{
+transform:scale(.85);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.close-popup{
+position:absolute;
+right:18px;
+top:16px;
+font-size:22px;
+cursor:pointer;
+color:#999;
+}
+
+.popup-title{
+font-size:23px;
+font-weight:bold;
+margin-bottom:10px;
+color:#ffb347;
+}
+
+.popup-sub{
+font-size:13px;
+color:#aaa;
+margin-bottom:18px;
+line-height:1.5;
+}
+
+/* PAY OPTIONS */
+
+.pay-option{
+background:#1d1d1d;
+padding:14px;
+border-radius:14px;
+margin-bottom:10px;
+display:flex;
+align-items:center;
+gap:12px;
+cursor:pointer;
+transition:.25s;
+border:1px solid transparent;
+}
+
+.pay-option:hover{
+background:#222;
+}
+
+.pay-option.active{
+border:1px solid #ff7a18;
+background:rgba(255,122,24,.12);
+}
+
+.pay-option i{
+font-size:20px;
+color:#ff7a18;
+}
+
+.popup input{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#0d0d0d;
+color:white;
+margin-top:10px;
+outline:none;
+font-size:15px;
+border:1px solid #222;
+}
+
+.popup input:focus{
+border:1px solid #ff7a18;
+}
+
+/* BUTTON */
+
+.pay-btn{
+width:100%;
+margin-top:18px;
+padding:15px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#ff7a18,#ffb347);
+color:#111;
+font-weight:bold;
+font-size:15px;
+cursor:pointer;
+transition:.25s;
+}
+
+.pay-btn:hover{
+transform:scale(1.02);
+}
+
+/* HELP */
+
+.help-box{
+margin-top:10px;
+background:#151515;
+padding:18px;
+border-radius:18px;
+text-align:center;
+}
+
+.help-btn{
+margin-top:12px;
+display:inline-block;
+padding:12px 18px;
+border-radius:14px;
+background:#25D366;
+color:white;
+font-weight:bold;
+text-decoration:none;
+}
+
+/* LINKS */
+
+a{
+text-decoration:none;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="avatar">
+<i class="fa fa-user"></i>
+</div>
+
+<div class="username">Usuário Cine Way</div>
+
+<div class="userid" id="userid"></div>
+
+<div id="statusUser"
+class="status-box status-free">
+FREE
+</div>
+
+</header>
+
+<div class="container">
+
+<!-- PREMIUM -->
+
+<div class="card vip" onclick="abrirPremium()">
+
+<div class="card-left">
+
+<div class="card-icon">
+<i class="fa fa-crown"></i>
+</div>
+
+<div class="card-info">
+<h4>Assinar Premium</h4>
+<p>Sem limites • Downloads • Sem bloqueios</p>
+</div>
+
+</div>
+
+<i class="fa fa-chevron-right"></i>
+
+</div>
+
+<!-- SECTION -->
+
+<div class="section-title">
+Biblioteca
+</div>
+
+<div class="card">
+
+<div class="card-left">
+
+<div class="card-icon">
+<i class="fa fa-star"></i>
+</div>
+
+<div class="card-info">
+<h4>Favoritos</h4>
+<p>Filmes e séries salvos</p>
+</div>
+
+</div>
+
+<i class="fa fa-chevron-right"></i>
+
+</div>
+
+<div class="card">
+
+<div class="card-left">
+
+<div class="card-icon">
+<i class="fa fa-clock"></i>
+</div>
+
+<div class="card-info">
+<h4>Continuar Assistindo</h4>
+<p>Continue de onde parou</p>
+</div>
+
+</div>
+
+<i class="fa fa-chevron-right"></i>
+
+</div>
+
+<!-- STORAGE -->
+
+<div class="storage">
+
+<div class="storage-top">
+<span>Armazenamento do App</span>
+<span>40%</span>
+</div>
+
+<div class="progress">
+<div></div>
+</div>
+
+</div>
+
+<!-- SECTION -->
+
+<div class="section-title">
+Comunidade
+</div>
+
+<a href="https://chat.whatsapp.com/L5SLaNaJqNGBH7hgfPyuFK?mode=gi_t"
+target="_blank">
+
+<div class="card">
+
+<div class="card-left">
+
+<div class="card-icon">
+<i class="fa fa-comments"></i>
+</div>
+
+<div class="card-info">
+<h4>Grupo da Comunidade</h4>
+<p>Partilhe opiniões e pedidos</p>
+</div>
+
+</div>
+
+<i class="fa fa-chevron-right"></i>
+
+</div>
+
+</a>
+
+<div class="help-box">
+
+<h3>Precisa de ajuda?</h3>
+
+<p style="
+margin-top:8px;
+font-size:13px;
+color:#aaa;
+line-height:1.6;
+">
+Fale diretamente com o suporte da Cine Way.
+</p>
+
+<a
+class="help-btn"
+href="https://wa.me/258865335028">
+
+<i class="fa fa-whatsapp"></i>
+Falar no WhatsApp
+
+</a>
+
+</div>
+
+<!-- SECTION -->
+
+<div class="section-title">
+Aplicação
+</div>
+
+<div class="card">
+
+<div class="card-left">
+
+<div class="card-icon">
+<i class="fa fa-download"></i>
+</div>
+
+<div class="card-info">
+<h4>Baixar Nova Versão</h4>
+<p>Atualize para recursos novos</p>
+</div>
+
+</div>
+
+<div>
+<span class="badge">NOVO</span>
+</div>
+
+</div>
+
+
+
+
+</div>
+
+<div class="card">
+
+<div class="card-left">
+
+<div class="card-icon">
+<i class="fa fa-envelope"></i>
+</div>
+
+<div class="card-info">
+<h4>Email</h4>
+<p>cinewaymzmedia12@gmail.com</p>
+</div>
+
+</div>
+
+<i class="fa fa-chevron-right"></i>
+
+</div>
+
+
+
+<!-- NAV -->
+
+<nav class="bottom-nav">
+
+<a href="cine_way.html">
+<i class="fa fa-house"></i>
+<span>Casa</span>
+</a>
+
+<a href="pesquisar.html">
+<i class="fa fa-search"></i>
+<span>Pesquisar</span>
+</a>
+
+<a href="jogos.html">
+<i class="fa fa-futbol"></i>
+<span>Jogos</span>
+</a>
+
+<a href="conta.html" class="active">
+<i class="fa fa-user"></i>
+<span>Conta</span>
+</a>
+
+</nav>
+
+<!-- POPUP PREMIUM -->
+
+<div class="popup" id="premiumPopup">
+
+<div class="popup-box">
+
+<div class="close-popup"
+onclick="fecharPopup()">
+×
+</div>
+
+<div class="popup-title">
+<i class="fa fa-crown"></i>
+Premium
+</div>
+
+<div class="popup-sub">
+Desbloqueie filmes e séries premium,
+downloads ilimitados e acesso total.
+</div>
+
+<div class="pay-option"
+onclick="selectPay('mpesa',this)">
+
+<i class="fa fa-mobile"></i>
+
+<div>
+<b>M-Pesa</b><br>
+<small>Pagamento instantâneo</small>
+</div>
+
+</div>
+
+<div class="pay-option"
+onclick="selectPay('emola',this)">
+
+<i class="fa fa-wallet"></i>
+
+<div>
+<b>e-Mola</b><br>
+<small>Carteira móvel</small>
+</div>
+
+</div>
+
+<input
+id="numero"
+placeholder="Digite seu número">
+
+<button
+class="pay-btn"
+onclick="pagar()">
+
+Pagar 50MT
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const FIREBASE =
+"https://cwmedia-ead7c-default-rtdb.firebaseio.com/";
+
+let deviceId = "unknown";
+let isPremium = false;
+
+/* ========================= */
+/* ESPERAR ANDROID */
+/* ========================= */
+
+function iniciarSistema(){
+
+    try{
+
+        if(window.Android){
+
+            deviceId = Android.getDeviceId();
+
+        }else{
+
+            deviceId =
+            localStorage.getItem("cw_id");
+
+            if(!deviceId){
+
+                deviceId =
+                "CW"+Date.now();
+
+                localStorage.setItem(
+                    "cw_id",
+                    deviceId
+                );
+            }
+        }
+
+    }catch(e){
+
+        deviceId = "CW_WEB_"+Date.now();
+
+    }
+
+    document.getElementById("userid")
+    .innerText = "ID: " + deviceId;
+
+    verificarUsuario();
+
+}
+
+/* ========================= */
+/* VERIFICAR USUARIO */
+/* ========================= */
+
+function verificarUsuario(){
+
+    fetch(
+        FIREBASE+
+        "signers/"+deviceId+".json"
+    )
+
+    .then(function(r){
+
+        return r.json();
+
+    })
+
+    .then(function(data){
+
+        /* NOVO USUARIO */
+
+        if(!data){
+
+            registrarNovoUsuario();
+
+            return;
+        }
+
+        /* PREMIUM */
+
+        if(data.premium === true){
+
+            isPremium = true;
+
+            const st =
+            document.getElementById(
+                "statusUser"
+            );
+
+            st.innerText = "PREMIUM";
+
+            st.classList.remove(
+                "status-free"
+            );
+
+            st.classList.add(
+                "status-premium"
+            );
+
+        }
+
+    })
+
+    .catch(function(e){
+
+        console.log(e);
+
+    });
+
+}
+
+/* ========================= */
+/* REGISTRAR */
+/* ========================= */
+
+function registrarNovoUsuario(){
+
+    fetch(
+        FIREBASE+
+        "signers/"+deviceId+".json",
+        {
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify({
+
+                id:deviceId,
+
+                premium:false,
+
+                plano:"FREE",
+
+                created:
+                new Date().toISOString()
+
+            })
+
+        }
+    );
+
+}
+
+/* ========================= */
+/* INICIAR */
+/* ========================= */
+
+window.onload = function(){
+
+    setTimeout(function(){
+
+        iniciarSistema();
+
+    },500);
+
+};
+
+/* ========================= */
+/* POPUP */
+/* ========================= */
+
+let metodo="";
+
+function abrirPremium(){
+
+    document.getElementById(
+        "premiumPopup"
+    ).style.display="flex";
+
+}
+
+function fecharPopup(){
+
+    document.getElementById(
+        "premiumPopup"
+    ).style.display="none";
+
+}
+
+/* ========================= */
+/* PAYMENT */
+/* ========================= */
+
+function selectPay(tipo,el){
+
+    metodo=tipo;
+
+    document
+    .querySelectorAll(".pay-option")
+    .forEach(function(item){
+
+        item.classList.remove(
+            "active"
+        );
+
+    });
+
+    el.classList.add("active");
+
+    const numero =
+    document.getElementById("numero");
+
+    if(tipo==="mpesa"){
+
+        numero.placeholder =
+        "Digite número M-Pesa";
+
+    }else{
+
+        numero.placeholder =
+        "Digite número e-Mola";
+
+    }
+
+}
+
+/* ========================= */
+/* PAGAR */
+/* ========================= */
+
+function pagar(){
+
+    const numero =
+    document.getElementById(
+        "numero"
+    ).value;
+
+    if(!metodo){
+
+        alert(
+            "Escolha o método"
+        );
+
+        return;
+    }
+
+    if(numero.length < 8){
+
+        alert(
+            "Número inválido"
+        );
+
+        return;
+    }
+
+    alert(
+        "Pedido enviado."
+    );
+
+    console.log({
+
+        user:deviceId,
+        metodo:metodo,
+        numero:numero
+
+    });
+
+    fecharPopup();
+
+}
+
+</script>
+
+</body>
+</html>

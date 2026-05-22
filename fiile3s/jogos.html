@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jogos ao Vivo - Cine Way</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#0b0b0b;
+color:white;
+font-family:Arial,Helvetica,sans-serif;
+padding-bottom:90px;
+}
+
+/* HEADER */
+
+header{
+height:65px;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 18px;
+position:sticky;
+top:0;
+z-index:99;
+border-bottom:1px solid #1f1f1f;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:20px;
+font-weight:bold;
+}
+
+.logo i{
+color:#ff7a18;
+}
+
+.header-right{
+color:#aaa;
+font-size:13px;
+}
+
+/* TOP BANNER */
+
+.top-banner{
+margin:15px;
+padding:18px;
+border-radius:22px;
+background:linear-gradient(135deg,#ff7a18,#ff3d00);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.top-banner h2{
+margin:0;
+font-size:22px;
+}
+
+.top-banner p{
+margin-top:8px;
+font-size:13px;
+opacity:0.95;
+}
+
+/* STATUS */
+
+.status-bar{
+display:flex;
+gap:10px;
+padding:0 15px;
+overflow-x:auto;
+margin-bottom:5px;
+}
+
+.status-bar::-webkit-scrollbar{
+display:none;
+}
+
+.status-chip{
+min-width:120px;
+background:#151515;
+padding:12px;
+border-radius:14px;
+border:1px solid #202020;
+}
+
+.status-chip h4{
+margin:0;
+font-size:20px;
+color:#ff7a18;
+}
+
+.status-chip p{
+margin:4px 0 0;
+font-size:12px;
+color:#aaa;
+}
+
+/* CONTAINER */
+
+.jogos-container{
+padding:15px;
+display:flex;
+flex-direction:column;
+gap:18px;
+}
+
+/* CARD */
+
+.jogo-card{
+background:linear-gradient(180deg,#151515,#101010);
+border-radius:24px;
+padding:18px;
+cursor:pointer;
+transition:0.25s;
+border:1px solid #1d1d1d;
+box-shadow:0 8px 20px rgba(0,0,0,0.35);
+position:relative;
+overflow:hidden;
+}
+
+.jogo-card:active{
+transform:scale(0.98);
+}
+
+.jogo-card::before{
+content:"";
+position:absolute;
+top:-40px;
+right:-40px;
+width:120px;
+height:120px;
+background:rgba(255,122,24,0.08);
+border-radius:50%;
+}
+
+/* LIGA */
+
+.liga{
+text-align:center;
+color:#bdbdbd;
+font-size:13px;
+margin-bottom:18px;
+font-weight:bold;
+}
+
+/* TIMES */
+
+.jogo-times{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+}
+
+/* TEAM */
+
+.team{
+display:flex;
+flex-direction:column;
+align-items:center;
+width:40%;
+text-align:center;
+}
+
+.team img{
+width:70px;
+height:70px;
+object-fit:contain;
+margin-bottom:8px;
+background:#1a1a1a;
+padding:8px;
+border-radius:18px;
+}
+
+.team span{
+font-size:14px;
+font-weight:bold;
+line-height:18px;
+}
+
+/* VS */
+
+.vs{
+background:linear-gradient(135deg,#ff7a18,#ff3d00);
+color:white;
+width:50px;
+height:50px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:15px;
+box-shadow:0 0 15px rgba(255,122,24,0.35);
+}
+
+/* INFO */
+
+.jogo-info{
+margin-top:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:13px;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.info-left{
+display:flex;
+align-items:center;
+gap:8px;
+color:#ffb703;
+font-weight:bold;
+}
+
+/* BADGES */
+
+.badge-live{
+background:red;
+padding:7px 14px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+animation:pulse 1s infinite;
+}
+
+.badge-wait{
+background:#303030;
+padding:7px 14px;
+border-radius:30px;
+font-size:12px;
+}
+
+@keyframes pulse{
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.05);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+/* EMPTY */
+
+.empty{
+text-align:center;
+margin-top:80px;
+color:#888;
+}
+
+.empty i{
+font-size:50px;
+margin-bottom:15px;
+color:#444;
+}
+
+/* POPUP */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.86);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+padding:20px;
+}
+
+.popup-box{
+background:#151515;
+padding:25px;
+border-radius:24px;
+width:100%;
+max-width:330px;
+text-align:center;
+border:1px solid #222;
+animation:show .25s ease;
+}
+
+@keyframes show{
+
+from{
+transform:scale(0.8);
+opacity:0;
+}
+
+to{
+transform:scale(1);
+opacity:1;
+}
+
+}
+
+.popup-box i{
+font-size:45px;
+color:#ff7a18;
+margin-bottom:10px;
+}
+
+.popup-box h3{
+margin:10px 0;
+}
+
+.popup-box p{
+color:#bbb;
+font-size:14px;
+line-height:22px;
+}
+
+.popup-box button{
+margin-top:15px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#ff7a18,#ff3d00);
+color:white;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* NAVBAR */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+width:100%;
+height:72px;
+background:#111;
+display:flex;
+justify-content:space-around;
+align-items:center;
+border-top:1px solid #1f1f1f;
+z-index:100;
+}
+
+.bottom-nav a{
+color:#888;
+font-size:11px;
+display:flex;
+flex-direction:column;
+align-items:center;
+text-decoration:none;
+gap:5px;
+transition:0.2s;
+}
+
+.bottom-nav a i{
+font-size:20px;
+}
+
+.bottom-nav a.active{
+color:#ff7a18;
+transform:translateY(-2px);
+}
+
+/* RESPONSIVO */
+
+@media(max-width:380px){
+
+.team img{
+width:60px;
+height:60px;
+}
+
+.team span{
+font-size:13px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+<i class="fa fa-futbol"></i>
+<span>Cine Way</span>
+</div>
+
+<div class="header-right">
+Jogos ao Vivo
+</div>
+
+</header>
+
+<div class="top-banner">
+
+<h2>⚽ Jogos Ao Vivo</h2>
+
+<p>
+Acompanhe partidas em tempo real,
+assista transmissões e veja confrontos disponíveis.
+</p>
+
+</div>
+
+<div class="status-bar">
+
+<div class="status-chip">
+<h4 id="totalJogos">0</h4>
+<p>Total Jogos</p>
+</div>
+
+<div class="status-chip">
+<h4 id="aoVivoCount">0</h4>
+<p>Ao Vivo</p>
+</div>
+
+<div class="status-chip">
+<h4 id="naoIniciadoCount">0</h4>
+<p>Aguardando</p>
+</div>
+
+</div>
+
+<div class="jogos-container" id="jogos">
+
+<div class="empty">
+<i class="fa fa-futbol"></i>
+<p>Carregando jogos...</p>
+</div>
+
+</div>
+
+<!-- POPUP -->
+
+<div class="popup" id="popup">
+
+<div class="popup-box">
+
+<i class="fa fa-clock"></i>
+
+<h3>Partida não iniciada</h3>
+
+<p>
+O jogo ainda não começou.
+Aguarde o horário oficial da transmissão.
+</p>
+
+<button onclick="fecharPopup()">
+OK
+</button>
+
+</div>
+
+</div>
+
+<nav class="bottom-nav">
+
+<a href="cine_way.html">
+<i class="fa fa-house"></i>
+<span>Casa</span>
+</a>
+
+<a href="pesquisar.html">
+<i class="fa fa-search"></i>
+<span>Pesquisar</span>
+</a>
+
+<a class="active">
+<i class="fa fa-futbol"></i>
+<span>Jogos</span>
+</a>
+
+<a href="conta.html">
+<i class="fa fa-user"></i>
+<span>Conta</span>
+</a>
+
+</nav>
+
+<script>
+
+const baseURL="https://cwmedia-ead7c-default-rtdb.firebaseio.com/cmdia/";
+
+const container=document.getElementById("jogos");
+
+let totalJogos=0;
+let totalAoVivo=0;
+let totalNaoIniciado=0;
+
+/* ========================= */
+/* CARREGAR JOGOS */
+/* ========================= */
+
+fetch(baseURL+"cwjogos.json")
+
+.then(r=>r.json())
+
+.then(data=>{
+
+container.innerHTML="";
+
+if(!data){
+
+container.innerHTML=`
+<div class="empty">
+<i class="fa fa-futbol"></i>
+<p>Nenhum jogo disponível.</p>
+</div>
+`;
+
+return;
+
+}
+
+Object.entries(data).reverse().forEach(([id,j])=>{
+
+totalJogos++;
+
+const agora=new Date();
+
+const horaAtual=agora.getHours();
+const minutoAtual=agora.getMinutes();
+
+const [horaJogo,minJogo]=j.timestat.split(":");
+
+let aoVivo=false;
+
+if(
+horaAtual > parseInt(horaJogo) ||
+(
+horaAtual == parseInt(horaJogo) &&
+minutoAtual >= parseInt(minJogo)
+)
+){
+aoVivo=true;
+}
+
+if(aoVivo){
+totalAoVivo++;
+}else{
+totalNaoIniciado++;
+}
+
+let badge=aoVivo
+
+? `<span class="badge-live">
+<i class="fa fa-circle"></i> AO VIVO
+</span>`
+
+: `<span class="badge-wait">
+Aguardando
+</span>`;
+
+container.innerHTML += `
+
+<div class="jogo-card"
+onclick="abrirJogo('${id}','${j.timestat}')">
+
+<div class="liga">
+${j.dt || "Partida"}
+</div>
+
+<div class="jogo-times">
+
+<div class="team">
+
+<img src="${j.imgh || ''}">
+
+<span>${j.ht || 'Time Casa'}</span>
+
+</div>
+
+<div class="vs">
+VS
+</div>
+
+<div class="team">
+
+<img src="${j.imga || ''}">
+
+<span>${j.at || 'Time Fora'}</span>
+
+</div>
+
+</div>
+
+<div class="jogo-info">
+
+<div class="info-left">
+<i class="fa fa-clock"></i>
+${j.timestat || '--:--'}
+</div>
+
+${badge}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("totalJogos").innerText=totalJogos;
+document.getElementById("aoVivoCount").innerText=totalAoVivo;
+document.getElementById("naoIniciadoCount").innerText=totalNaoIniciado;
+
+})
+
+.catch(()=>{
+
+container.innerHTML=`
+<div class="empty">
+<i class="fa fa-wifi"></i>
+<p>Erro ao carregar jogos.</p>
+</div>
+`;
+
+});
+
+/* ========================= */
+/* ABRIR JOGO */
+/* ========================= */
+
+function abrirJogo(id,timestat){
+
+const agora=new Date();
+
+const horaAtual=agora.getHours();
+const minutoAtual=agora.getMinutes();
+
+const [horaJogo,minJogo]=timestat.split(":");
+
+if(
+horaAtual > parseInt(horaJogo) ||
+(
+horaAtual == parseInt(horaJogo) &&
+minutoAtual >= parseInt(minJogo)
+)
+){
+
+window.location.href="assistirjogo.html?id="+id;
+
+}else{
+
+document.getElementById("popup").style.display="flex";
+
+}
+
+}
+
+/* ========================= */
+/* FECHAR POPUP */
+/* ========================= */
+
+function fecharPopup(){
+
+document.getElementById("popup").style.display="none";
+
+}
+
+</script>
+
+</body>
+</html>

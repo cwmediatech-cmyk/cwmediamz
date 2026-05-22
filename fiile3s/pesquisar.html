@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pesquisar - Cine Way</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#0b0b0b;
+color:white;
+font-family:Arial;
+padding-bottom:90px;
+overflow-x:hidden;
+}
+
+/* ===================== */
+/* HEADER */
+/* ===================== */
+
+header{
+position:sticky;
+top:0;
+z-index:50;
+background:#000;
+padding:15px;
+box-shadow:0 2px 10px rgba(0,0,0,0.5);
+}
+
+.top-title{
+font-size:22px;
+font-weight:bold;
+margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.top-title i{
+color:#ff7a18;
+}
+
+/* ===================== */
+/* SEARCH BOX */
+/* ===================== */
+
+.search-box{
+display:flex;
+align-items:center;
+background:#151515;
+border:2px solid #1f1f1f;
+border-radius:14px;
+padding:12px;
+transition:0.3s;
+}
+
+.search-box:focus-within{
+border-color:#ff7a18;
+box-shadow:0 0 12px rgba(255,122,24,0.2);
+}
+
+.search-box i{
+color:#ff7a18;
+font-size:18px;
+margin-right:10px;
+}
+
+.search-box input{
+flex:1;
+background:none;
+border:none;
+color:white;
+font-size:16px;
+outline:none;
+}
+
+.search-box input::placeholder{
+color:#777;
+}
+
+/* ===================== */
+/* RESULTADOS */
+/* ===================== */
+
+.result-info{
+padding:15px 15px 0;
+color:#aaa;
+font-size:14px;
+}
+
+/* ===================== */
+/* GRID */
+/* ===================== */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+padding:15px;
+}
+
+/* ===================== */
+/* CARD */
+/* ===================== */
+
+.card{
+background:#151515;
+border-radius:18px;
+overflow:hidden;
+transition:0.3s;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+
+.card:hover{
+transform:scale(1.03);
+}
+
+.card img{
+width:100%;
+height:240px;
+object-fit:cover;
+object-position:top;
+display:block;
+}
+
+/* INFO */
+
+.card-info{
+padding:10px;
+}
+
+.card h4{
+font-size:15px;
+line-height:1.4;
+height:42px;
+overflow:hidden;
+display:-webkit-box;
+-webkit-line-clamp:2;
+-webkit-box-orient:vertical;
+margin-bottom:6px;
+}
+
+.card p{
+font-size:12px;
+color:#aaa;
+}
+
+/* BADGE */
+
+.badge{
+background:#FF7A18;
+padding:4px 8px;
+border-radius:7px;
+font-size:11px;
+display:inline-block;
+margin-bottom:8px;
+font-weight:bold;
+}
+
+/* EMPTY */
+
+.empty{
+padding:50px 20px;
+text-align:center;
+color:#888;
+}
+
+.empty i{
+font-size:60px;
+margin-bottom:15px;
+color:#333;
+}
+
+/* ===================== */
+/* NAVBAR */
+/* ===================== */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+width:100%;
+height:70px;
+background:#111;
+display:flex;
+justify-content:space-around;
+align-items:center;
+border-top:1px solid #222;
+z-index:100;
+}
+
+.bottom-nav a{
+color:#888;
+font-size:11px;
+display:flex;
+flex-direction:column;
+align-items:center;
+text-decoration:none;
+}
+
+.bottom-nav a.active{
+color:#ff7a18;
+}
+
+.bottom-nav i{
+font-size:20px;
+margin-bottom:4px;
+}
+
+/* LINKS */
+
+a{
+text-decoration:none;
+color:white;
+}
+
+/* RESPONSIVO */
+
+@media(min-width:700px){
+
+.grid{
+grid-template-columns:repeat(4,1fr);
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="top-title">
+<i class="fa fa-search"></i>
+Pesquisar
+</div>
+
+<div class="search-box">
+
+<i class="fa fa-search"></i>
+
+<input
+type="text"
+id="pesquisa"
+placeholder="Pesquisar filmes, séries e animes...">
+
+</div>
+
+</header>
+
+<!-- INFO -->
+
+<div class="result-info" id="resultInfo">
+Digite algo para pesquisar...
+</div>
+
+<!-- RESULTADOS -->
+
+<section class="grid" id="resultados"></section>
+
+<!-- NAV -->
+
+<nav class="bottom-nav">
+
+<a href="cine_way.html">
+<i class="fa fa-house"></i>
+<span>Casa</span>
+</a>
+
+<a href="pesquisar.html" class="active">
+<i class="fa fa-search"></i>
+<span>Pesquisar</span>
+</a>
+
+<a href="jogos.html">
+<i class="fa fa-futbol"></i>
+<span>Jogos</span>
+</a>
+
+<a href="conta.html">
+<i class="fa fa-user"></i>
+<span>Conta</span>
+</a>
+
+</nav>
+
+<script>
+
+const baseURL="https://cwmedia-ead7c-default-rtdb.firebaseio.com/cmdia/";
+
+let banco=[];
+
+/* ===================== */
+/* CRIAR CARD */
+/* ===================== */
+
+function criarCard(item){
+
+return `
+
+<a href="${item.link}">
+
+<div class="card">
+
+<img src="${item.img || ''}">
+
+<div class="card-info">
+
+<span class="badge">${item.badge}</span>
+
+<h4>${item.title || 'Sem título'}</h4>
+
+<p>${item.ano || '--'}</p>
+
+</div>
+
+</div>
+
+</a>
+
+`;
+
+}
+
+/* ===================== */
+/* CARREGAR DADOS */
+/* ===================== */
+
+async function carregarDados(){
+
+try{
+
+const filmes = await fetch(baseURL+"cwfilmes.json").then(r=>r.json());
+
+const series = await fetch(baseURL+"cwseries.json").then(r=>r.json());
+
+const animes = await fetch(baseURL+"cwanimes.json").then(r=>r.json());
+
+/* FILMES */
+
+Object.values(filmes||{}).forEach(f=>{
+
+banco.push({
+title:f.title || "",
+ano:f.ano || "--",
+img:f.imgurl || "",
+tipo:"filme",
+badge:"Filme",
+views:parseInt(f.views || 0),
+added:f.added || "",
+link:`assistir.html?title=${encodeURIComponent(f.title)}&video=${encodeURIComponent(f.urlServer)}`
+});
+
+});
+
+/* SERIES */
+
+Object.entries(series||{}).forEach(([id,s])=>{
+
+banco.push({
+title:s.title || "",
+ano:s.ano || "--",
+img:s.imgurl || "",
+tipo:"serie",
+badge:"Série",
+views:parseInt(s.views || 0),
+added:s.added || "",
+link:`show_serie.html?id=${id}`
+});
+
+});
+
+/* ANIMES */
+
+Object.entries(animes||{}).forEach(([id,a])=>{
+
+let badge="Anime Filme";
+let link="";
+
+if(a.temps){
+
+badge="Anime Série";
+link=`show_serie.html?id=${id}&type=anime`;
+
+}else{
+
+link=`assistir.html?title=${encodeURIComponent(a.title)}&video=${encodeURIComponent(a.urlServer)}`;
+
+}
+
+banco.push({
+title:a.title || "",
+ano:a.ano || "--",
+img:a.imgurl || "",
+tipo:"anime",
+badge:badge,
+views:parseInt(a.views || 0),
+added:a.added || "",
+link:link
+});
+
+});
+
+/* ORDENAR POR MAIS RECENTES */
+
+banco.sort((a,b)=>
+new Date(b.added || 0) - new Date(a.added || 0)
+);
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+carregarDados();
+
+/* ===================== */
+/* PESQUISA */
+/* ===================== */
+
+document
+.getElementById("pesquisa")
+.addEventListener("input",function(){
+
+const termo=this.value
+.toLowerCase()
+.trim();
+
+const container=document.getElementById("resultados");
+
+const resultInfo=document.getElementById("resultInfo");
+
+/* LIMPAR */
+
+container.innerHTML="";
+
+/* VAZIO */
+
+if(!termo){
+
+resultInfo.innerHTML="Digite algo para pesquisar...";
+
+container.innerHTML=`
+
+<div class="empty">
+
+<i class="fa fa-film"></i>
+
+<h3>Pesquise filmes, séries e animes</h3>
+
+</div>
+
+`;
+
+return;
+
+}
+
+/* FILTRAR */
+
+let resultados=banco.filter(item =>
+
+(item.title || "")
+.toLowerCase()
+.includes(termo)
+
+);
+
+/* ORDENAR */
+
+resultados.sort((a,b)=>{
+
+const ta=(a.title || "").toLowerCase();
+const tb=(b.title || "").toLowerCase();
+
+/* EXATO */
+
+if(ta===termo) return -1;
+if(tb===termo) return 1;
+
+/* COMEÇA */
+
+if(ta.startsWith(termo)) return -1;
+if(tb.startsWith(termo)) return 1;
+
+/* MAIS VISTOS */
+
+if(b.views !== a.views){
+return b.views - a.views;
+}
+
+/* ALFABÉTICO */
+
+return ta.localeCompare(tb);
+
+});
+
+/* INFO */
+
+resultInfo.innerHTML=`
+${resultados.length} resultado(s) encontrado(s)
+`;
+
+/* SEM RESULTADO */
+
+if(resultados.length<=0){
+
+container.innerHTML=`
+
+<div class="empty">
+
+<i class="fa fa-circle-xmark"></i>
+
+<h3>Nenhum resultado encontrado</h3>
+
+<p>Tente outro nome.</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+/* MOSTRAR */
+
+resultados.forEach(item=>{
+
+container.innerHTML += criarCard(item);
+
+});
+
+});
+
+/* ===================== */
+/* ATIVAR NAV */
+/* ===================== */
+
+const links = document.querySelectorAll(".bottom-nav a");
+
+links.forEach(link => {
+
+if(link.href === window.location.href){
+
+link.classList.add("active");
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>CWMedia - Série</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#0b0b0b;
+color:white;
+font-family:Arial,Helvetica,sans-serif;
+padding-bottom:100px;
+overflow-x:hidden;
+}
+
+/* HEADER */
+
+header{
+position:fixed;
+top:0;
+left:0;
+right:0;
+height:65px;
+background:rgba(0,0,0,0.92);
+backdrop-filter:blur(10px);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 18px;
+z-index:100;
+border-bottom:1px solid #1b1b1b;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+color:#ff7a18;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.logo i{
+font-size:20px;
+}
+
+.back-btn{
+width:42px;
+height:42px;
+border-radius:12px;
+background:#181818;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+cursor:pointer;
+}
+
+/* BANNER */
+
+.banner{
+width:100%;
+height:340px;
+background-size:cover;
+background-position:top;
+position:relative;
+margin-top:65px;
+}
+
+.banner::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:
+linear-gradient(
+to top,
+#0b0b0b 8%,
+rgba(0,0,0,0.1)
+);
+}
+
+/* POSTER INFO */
+
+.poster-info{
+position:relative;
+margin-top:-90px;
+padding:0 18px;
+z-index:10;
+}
+
+.poster-box{
+display:flex;
+gap:15px;
+align-items:flex-end;
+}
+
+.poster{
+width:120px;
+height:175px;
+object-fit:cover;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,0.45);
+border:2px solid #222;
+background:#111;
+}
+
+.info{
+flex:1;
+padding-bottom:10px;
+}
+
+.info h1{
+margin:0;
+font-size:24px;
+line-height:30px;
+}
+
+.meta{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-top:10px;
+}
+
+.badge{
+background:#ff7a18;
+padding:6px 12px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+}
+
+.badge.gray{
+background:#222;
+color:#bbb;
+}
+
+/* SINOPSE */
+
+.sinopse{
+padding:20px 18px 10px;
+color:#d5d5d5;
+font-size:14px;
+line-height:24px;
+}
+
+/* DROPDOWN */
+
+.dropdown{
+padding:0 18px;
+margin-top:10px;
+}
+
+.dropdown-btn{
+background:#151515;
+padding:15px;
+border-radius:16px;
+cursor:pointer;
+border:1px solid #252525;
+display:flex;
+align-items:center;
+justify-content:space-between;
+font-weight:bold;
+font-size:15px;
+transition:0.2s;
+}
+
+.dropdown-btn:active{
+transform:scale(0.98);
+}
+
+.dropdown-list{
+display:none;
+background:#121212;
+margin-top:8px;
+border-radius:18px;
+overflow:hidden;
+border:1px solid #1f1f1f;
+}
+
+.dropdown-item{
+padding:16px;
+cursor:pointer;
+border-bottom:1px solid #1d1d1d;
+transition:0.2s;
+}
+
+.dropdown-item:last-child{
+border-bottom:none;
+}
+
+.dropdown-item:hover{
+background:#ff7a18;
+}
+
+/* EPISODES */
+
+.episodes{
+padding:18px;
+display:flex;
+flex-direction:column;
+gap:14px;
+}
+
+.episode{
+background:linear-gradient(180deg,#151515,#111);
+padding:14px;
+border-radius:20px;
+display:flex;
+align-items:center;
+gap:14px;
+cursor:pointer;
+transition:0.25s;
+border:1px solid #1e1e1e;
+}
+
+.episode:active{
+transform:scale(0.98);
+}
+
+.ep-number{
+min-width:58px;
+height:58px;
+border-radius:16px;
+background:linear-gradient(135deg,#ff7a18,#ff3d00);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:14px;
+box-shadow:0 5px 14px rgba(255,122,24,0.35);
+}
+
+.ep-info{
+flex:1;
+overflow:hidden;
+}
+
+.ep-info h3{
+margin:0;
+font-size:15px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.ep-info p{
+margin-top:6px;
+font-size:12px;
+color:#aaa;
+}
+
+.play-btn{
+width:46px;
+height:46px;
+border-radius:14px;
+background:#1f1f1f;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:16px;
+color:#ff7a18;
+}
+
+/* EMPTY */
+
+.empty{
+text-align:center;
+padding:60px 20px;
+color:#888;
+}
+
+.empty i{
+font-size:50px;
+margin-bottom:15px;
+color:#333;
+}
+
+/* BOTTOM */
+
+.bottom-space{
+height:70px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+<i class="fa fa-play"></i>
+<span>CWMedia</span>
+</div>
+
+<div class="back-btn"
+onclick="history.back()">
+
+<i class="fa fa-arrow-left"></i>
+
+</div>
+
+</header>
+
+<div id="banner" class="banner"></div>
+
+<div class="poster-info">
+
+<div class="poster-box">
+
+<img id="poster"
+class="poster"
+src="">
+
+<div class="info">
+
+<h1 id="title">
+Carregando...
+</h1>
+
+<div class="meta">
+
+<div class="badge"
+id="ano">
+2026
+</div>
+
+<div class="badge gray"
+id="lang">
+Dublado
+</div>
+
+<div class="badge gray"
+id="tipoBadge">
+Série
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="sinopse"
+id="sinopse">
+
+Sem sinopse disponível.
+
+</div>
+
+<div class="dropdown">
+
+<div id="dropdownBtn"
+class="dropdown-btn">
+
+<span>Selecionar Temporada</span>
+
+<i class="fa fa-chevron-down"></i>
+
+</div>
+
+<div id="dropdownList"
+class="dropdown-list"></div>
+
+</div>
+
+<div id="episodes"
+class="episodes">
+
+<div class="empty">
+
+<i class="fa fa-film"></i>
+
+<p>Carregando episódios...</p>
+
+</div>
+
+</div>
+
+<div class="bottom-space"></div>
+
+<script>
+
+/* ========================= */
+/* PARAMS */
+/* ========================= */
+
+const params = new URLSearchParams(window.location.search);
+
+const serieID = params.get("id");
+const type = params.get("type");
+
+/* ========================= */
+/* PATH */
+/* ========================= */
+
+let basePath="cwseries";
+let tipoLabel="Série";
+
+if(type==="anime"){
+
+basePath="cwanimes";
+tipoLabel="Anime";
+
+}
+
+/* ========================= */
+/* URL */
+/* ========================= */
+
+const url=
+"https://cwmedia-ead7c-default-rtdb.firebaseio.com/cmdia/"
++basePath+"/"+serieID+".json";
+
+/* ========================= */
+/* VAR */
+/* ========================= */
+
+let temporadas={};
+
+/* ========================= */
+/* BUSCAR */
+/* ========================= */
+
+fetch(url)
+
+.then(res=>res.json())
+
+.then(serie=>{
+
+if(!serie){
+
+document.body.innerHTML=`
+
+<div class="empty">
+
+<i class="fa fa-circle-xmark"></i>
+
+<p>Série não encontrada.</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+/* temporadas */
+
+temporadas=serie.temps || {};
+
+/* visual */
+
+document.getElementById("banner")
+.style.backgroundImage=
+"url("+(
+serie.imgurl || ""
+)+")";
+
+document.getElementById("poster").src=
+serie.imgurl || "";
+
+document.getElementById("title").innerText=
+serie.title || "Sem título";
+
+document.getElementById("ano").innerText=
+serie.ano || "2026";
+
+document.getElementById("lang").innerText=
+serie.lang || "Dublado";
+
+document.getElementById("tipoBadge").innerText=
+tipoLabel;
+
+document.getElementById("sinopse").innerText=
+serie.sinopse ||
+"Sem sinopse disponível.";
+
+/* dropdown */
+
+criarDropdown();
+
+})
+
+.catch(()=>{
+
+document.body.innerHTML=`
+
+<div class="empty">
+
+<i class="fa fa-wifi"></i>
+
+<p>Erro ao carregar dados.</p>
+
+</div>
+
+`;
+
+});
+
+/* ========================= */
+/* DROPDOWN */
+/* ========================= */
+
+document.getElementById("dropdownBtn")
+.onclick=()=>{
+
+const list=
+document.getElementById("dropdownList");
+
+list.style.display=
+list.style.display==="block"
+? "none"
+: "block";
+
+};
+
+/* ========================= */
+/* CRIAR TEMP */
+/* ========================= */
+
+function criarDropdown(){
+
+const list=
+document.getElementById("dropdownList");
+
+list.innerHTML="";
+
+const temps=
+Object.keys(temporadas);
+
+if(temps.length===0){
+
+document.getElementById("episodes")
+.innerHTML=`
+
+<div class="empty">
+
+<i class="fa fa-video"></i>
+
+<p>Nenhuma temporada disponível.</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+temps.forEach((temp,index)=>{
+
+const item=
+document.createElement("div");
+
+item.className="dropdown-item";
+
+item.innerHTML=
+`
+<i class="fa fa-layer-group"></i>
+&nbsp;
+Temporada ${temp.replace("T","")}
+`;
+
+item.onclick=()=>{
+
+selecionarTemporada(temp);
+
+list.style.display="none";
+
+};
+
+list.appendChild(item);
+
+/* abrir primeira */
+
+if(index===0){
+
+selecionarTemporada(temp);
+
+}
+
+});
+
+}
+
+/* ========================= */
+/* MOSTRAR EPS */
+/* ========================= */
+
+function selecionarTemporada(temp){
+
+document.getElementById("dropdownBtn")
+.innerHTML=
+`
+<span>
+Temporada ${temp.replace("T","")}
+</span>
+
+<i class="fa fa-chevron-down"></i>
+`;
+
+const container=
+document.getElementById("episodes");
+
+container.innerHTML="";
+
+const episodios=
+temporadas[temp] || {};
+
+Object.keys(episodios).forEach(ep=>{
+
+const raw=
+episodios[ep] || "";
+
+/* formato:
+titulo_#_link
+*/
+
+const dados=
+raw.split("_#_");
+
+const titulo=
+dados[0] || "Episódio";
+
+const link=
+dados[1] || "";
+
+const div=
+document.createElement("div");
+
+div.className="episode";
+
+div.innerHTML=
+`
+
+<div class="ep-number">
+
+${ep.toUpperCase()}
+
+</div>
+
+<div class="ep-info">
+
+<h3>
+${titulo}
+</h3>
+
+<p>
+Clique para assistir episódio
+</p>
+
+</div>
+
+<div class="play-btn">
+
+<i class="fa fa-play"></i>
+
+</div>
+
+`;
+
+div.onclick=()=>{
+
+window.location=
+"assistir.html?title="
++encodeURIComponent(titulo)
++"&video="
++encodeURIComponent(link);
+
+};
+
+container.appendChild(div);
+
+});
+
+}
+
+</script>
+
+</body>
+
+</html>

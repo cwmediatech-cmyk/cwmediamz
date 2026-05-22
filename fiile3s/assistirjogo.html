@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>WBCine Live</title>
+
+<!-- HLS PLAYER -->
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<!-- ICONS -->
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html,
+body{
+
+width:100%;
+min-height:100%;
+
+background:#000;
+
+font-family:Arial;
+
+color:white;
+
+overflow-x:hidden;
+overflow-y:auto;
+
+}
+
+/* =====================================
+BODY
+===================================== */
+
+body{
+padding-bottom:120px;
+}
+
+/* =====================================
+PLAYER BOX
+===================================== */
+
+#playerBox{
+
+position:relative;
+
+width:100%;
+min-height:100vh;
+
+background:#000;
+
+}
+
+/* =====================================
+TOPBAR
+===================================== */
+
+.topbar{
+
+position:sticky;
+
+top:0;
+
+width:100%;
+
+height:70px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 18px;
+
+background:linear-gradient(
+to bottom,
+rgba(0,0,0,0.98),
+rgba(0,0,0,0.85)
+);
+
+z-index:999;
+
+border-bottom:1px solid #1f1f1f;
+
+backdrop-filter:blur(10px);
+
+}
+
+/* =====================================
+LOGO
+===================================== */
+
+.logo{
+
+font-size:22px;
+
+font-weight:bold;
+
+color:#ff7a18;
+
+max-width:65%;
+
+overflow:hidden;
+
+text-overflow:ellipsis;
+
+white-space:nowrap;
+
+}
+
+/* =====================================
+LIVE
+===================================== */
+
+.live{
+
+background:red;
+
+padding:10px 16px;
+
+border-radius:14px;
+
+font-size:13px;
+
+font-weight:bold;
+
+box-shadow:
+0 0 18px rgba(255,0,0,0.4);
+
+}
+
+/* =====================================
+INFO BOX
+===================================== */
+
+#infoLive{
+
+margin:15px;
+
+background:rgba(15,15,15,0.97);
+
+padding:18px;
+
+border-radius:22px;
+
+font-size:14px;
+
+line-height:1.8;
+
+border:1px solid #2d2d2d;
+
+box-shadow:
+0 0 25px rgba(0,0,0,0.55);
+
+}
+
+/* =====================================
+TEAMS
+===================================== */
+
+.teams{
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:25px;
+
+margin-top:20px;
+
+flex-wrap:wrap;
+
+}
+
+.team{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+width:100px;
+
+text-align:center;
+
+font-size:15px;
+
+font-weight:bold;
+
+}
+
+.team img{
+
+width:80px;
+height:80px;
+
+object-fit:contain;
+
+background:#111;
+
+padding:6px;
+
+border-radius:50%;
+
+border:1px solid #333;
+
+margin-bottom:8px;
+
+}
+
+.vs{
+
+font-size:36px;
+
+font-weight:bold;
+
+color:#ff7a18;
+
+}
+
+/* =====================================
+CONTADOR
+===================================== */
+
+#contador{
+
+margin:0 15px 15px 15px;
+
+background:rgba(0,0,0,0.92);
+
+padding:14px 18px;
+
+border-radius:16px;
+
+font-size:16px;
+
+font-weight:bold;
+
+color:#ffb347;
+
+border:1px solid #333;
+
+text-align:center;
+
+box-shadow:
+0 0 15px rgba(0,0,0,0.6);
+
+}
+
+/* =====================================
+VIDEO CONTAINER
+===================================== */
+
+#videoContainer{
+
+position:relative;
+
+width:calc(100% - 30px);
+
+margin:0 auto;
+
+aspect-ratio:16/9;
+
+background:#0b0b0b;
+
+border-radius:22px;
+
+overflow:hidden;
+
+border:2px solid #242424;
+
+box-shadow:
+0 0 30px rgba(0,0,0,0.8),
+0 0 15px rgba(255,122,24,0.12);
+
+}
+
+/* =====================================
+VIDEO / IFRAME
+===================================== */
+
+video,
+iframe{
+
+width:100%;
+height:100%;
+
+border:none;
+
+background:#000;
+
+display:block;
+
+}
+
+/* =====================================
+LOADING
+===================================== */
+
+#loading{
+
+position:absolute;
+
+top:50%;
+left:50%;
+
+transform:translate(-50%,-50%);
+
+background:rgba(0,0,0,0.88);
+
+padding:16px 24px;
+
+border-radius:15px;
+
+border:1px solid #333;
+
+font-size:15px;
+
+z-index:120;
+
+}
+
+/* =====================================
+ERRO
+===================================== */
+
+#erro{
+
+margin:20px auto;
+
+background:rgba(255,0,0,0.16);
+
+padding:14px 20px;
+
+border-radius:14px;
+
+border:1px solid red;
+
+display:none;
+
+font-size:14px;
+
+max-width:90%;
+
+text-align:center;
+
+}
+
+/* =====================================
+BUTTONS
+===================================== */
+
+.buttons{
+
+display:flex;
+
+gap:15px;
+
+padding:25px 15px 40px 15px;
+
+flex-wrap:wrap;
+
+}
+
+.btn{
+
+flex:1;
+
+min-width:140px;
+
+height:58px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+border-radius:18px;
+
+font-size:17px;
+
+font-weight:bold;
+
+text-decoration:none;
+
+border:none;
+
+color:white;
+
+cursor:pointer;
+
+}
+
+/* =====================================
+BACK
+===================================== */
+
+.btn-back{
+
+background:#ff7a18;
+
+box-shadow:
+0 0 15px rgba(255,122,24,0.3);
+
+}
+
+/* =====================================
+OPEN
+===================================== */
+
+.btn-open{
+
+background:#0f9d58;
+
+box-shadow:
+0 0 15px rgba(15,157,88,0.3);
+
+}
+
+/* =====================================
+PAYWALL
+===================================== */
+
+.paywall{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,0.97);
+
+display:none;
+
+align-items:center;
+justify-content:center;
+
+padding:20px;
+
+z-index:99999;
+
+}
+
+.paybox{
+
+background:#111;
+
+padding:25px;
+
+border-radius:22px;
+
+width:100%;
+max-width:340px;
+
+border:1px solid #2d2d2d;
+
+text-align:center;
+
+}
+
+.btn-pay{
+
+width:100%;
+
+height:55px;
+
+border:none;
+
+border-radius:15px;
+
+background:#25D366;
+
+color:white;
+
+font-size:16px;
+
+font-weight:bold;
+
+margin-top:20px;
+
+}
+
+/* =====================================
+RESPONSIVO
+===================================== */
+
+@media(max-width:600px){
+
+.logo{
+font-size:18px;
+}
+
+.live{
+font-size:12px;
+padding:8px 12px;
+}
+
+.team img{
+width:70px;
+height:70px;
+}
+
+.vs{
+font-size:30px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="playerBox">
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div class="logo">
+WBCine Live
+</div>
+
+<div class="live">
+🔴 AO VIVO
+</div>
+
+</div>
+
+<!-- INFO -->
+
+<div id="infoLive">
+
+Carregando live...
+
+</div>
+
+<!-- CONTADOR -->
+
+<div id="contador">
+
+Carregando...
+
+</div>
+
+<!-- VIDEO -->
+
+<div id="videoContainer">
+
+<div id="loading">
+
+📡 Carregando transmissão...
+
+</div>
+
+</div>
+
+<!-- ERRO -->
+
+<div id="erro"></div>
+
+<!-- BUTTONS -->
+
+<div class="buttons">
+
+<a href="javascript:history.back()"
+class="btn btn-back">
+
+⬅ Voltar
+
+</a>
+
+<button id="btnOpen"
+class="btn btn-open">
+
+📺 Abrir transmissão
+
+</button>
+
+</div>
+
+</div>
+
+<!-- PAYWALL -->
+
+<div class="paywall"
+id="paywall">
+
+<div class="paybox">
+
+<div style="
+font-size:65px;
+margin-bottom:10px;
+">
+🔒
+</div>
+
+<h2>
+Conteúdo Premium
+</h2>
+
+<p style="
+margin-top:12px;
+line-height:1.8;
+color:#bbb;
+">
+
+Seu tempo grátis terminou.<br>
+Assine premium para continuar assistindo.
+
+</p>
+
+<div style="
+margin-top:20px;
+background:#1b1b1b;
+padding:18px;
+border-radius:16px;
+">
+
+<div style="
+font-size:34px;
+font-weight:bold;
+color:#ffb347;
+">
+50 MT
+</div>
+
+<div style="
+margin-top:5px;
+color:#999;
+">
+Premium 2 Semanas
+</div>
+
+</div>
+
+<button
+class="btn-pay"
+onclick="abrirWhatsappPagamento()">
+
+💬 Fazer pagamento
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+/* =====================================
+BASE
+===================================== */
+
+const baseURL =
+"https://cwmedia-ead7c-default-rtdb.firebaseio.com/cmdia/";
+
+const FIREBASE_URL =
+"https://cwmedia-ead7c-default-rtdb.firebaseio.com/";
+
+/* =====================================
+PARAMS
+===================================== */
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const id =
+params.get("id");
+
+/* =====================================
+ELEMENTOS
+===================================== */
+
+const videoContainer =
+document.getElementById(
+"videoContainer"
+);
+
+const loading =
+document.getElementById(
+"loading"
+);
+
+const erro =
+document.getElementById(
+"erro"
+);
+
+const contador =
+document.getElementById(
+"contador"
+);
+
+const infoLive =
+document.getElementById(
+"infoLive"
+);
+
+const btnOpen =
+document.getElementById(
+"btnOpen"
+);
+
+/* =====================================
+USER
+===================================== */
+
+let deviceId =
+"UNKNOWN";
+
+let isPremium =
+false;
+
+let LIVE_URL =
+null;
+
+/* =====================================
+DEVICE
+===================================== */
+
+try{
+
+if(window.Android){
+
+deviceId =
+Android.getDeviceId();
+
+}else{
+
+deviceId =
+localStorage.getItem(
+"wbcine_id"
+);
+
+if(!deviceId){
+
+deviceId =
+"WB-"+Date.now();
+
+localStorage.setItem(
+"wbcine_id",
+deviceId
+);
+
+}
+
+}
+
+}catch(e){
+
+deviceId =
+"WEB-"+Date.now();
+
+}
+
+/* =====================================
+START
+===================================== */
+
+window.onload =
+function(){
+
+verificarUsuario();
+
+iniciarPlayer();
+
+};
+
+/* =====================================
+VERIFICAR USER
+===================================== */
+
+function verificarUsuario(){
+
+fetch(
+
+FIREBASE_URL+
+
+"signers/"+
+
+deviceId+
+
+".json"
+
+)
+
+.then(r=>r.json())
+
+.then(function(data){
+
+if(!data){
+
+controleFree();
+
+return;
+
+}
+
+if(data.premium !== true){
+
+controleFree();
+
+return;
+
+}
+
+let expired =
+data.expired;
+
+if(
+expired == null ||
+expired == 0 ||
+expired == "0"
+){
+
+controleFree();
+
+return;
+
+}
+
+let validade =
+new Date(
+String(expired)
+.replace(" ","T")
+);
+
+if(
+isNaN(
+validade.getTime()
+)
+){
+
+controleFree();
+
+return;
+
+}
+
+let agora =
+new Date();
+
+if(
+agora.getTime()
+<
+validade.getTime()
+){
+
+isPremium = true;
+
+contador.innerHTML =
+"👑 PREMIUM ATIVO";
+
+contador.style.color =
+"#00ff95";
+
+contador.style.border =
+"1px solid #00ff95";
+
+return;
+
+}
+
+controleFree();
+
+})
+
+.catch(function(){
+
+controleFree();
+
+});
+
+}
+
+/* =====================================
+FREE TIMER
+===================================== */
+
+const TEMPO_MAX =
+15 * 60;
+
+function controleFree(){
+
+if(isPremium){
+return;
+}
+
+let tempo =
+localStorage.getItem(
+"wbcine_time"
+);
+
+if(!tempo){
+
+tempo = 0;
+
+}
+
+tempo =
+parseInt(tempo);
+
+let restante =
+TEMPO_MAX - tempo;
+
+mostrarTempo(restante);
+
+const interval =
+setInterval(function(){
+
+tempo++;
+
+restante--;
+
+localStorage.setItem(
+"wbcine_time",
+tempo
+);
+
+mostrarTempo(restante);
+
+if(restante <= 0){
+
+clearInterval(
+interval
+);
+
+bloquear();
+
+}
+
+},1000);
+
+}
+
+function mostrarTempo(seg){
+
+let min =
+Math.floor(seg/60);
+
+let sec =
+seg%60;
+
+if(sec < 10){
+sec = "0"+sec;
+}
+
+contador.innerHTML =
+
+"⏳ Tempo grátis: "+
+
+min+":"+sec;
+
+}
+
+/* =====================================
+PAYWALL
+===================================== */
+
+function bloquear(){
+
+try{
+
+let video =
+document.querySelector(
+"video"
+);
+
+if(video){
+video.pause();
+}
+
+}catch(e){}
+
+document
+.getElementById(
+"paywall"
+)
+.style.display =
+"flex";
+
+}
+
+/* =====================================
+PLAYER
+===================================== */
+
+async function iniciarPlayer(){
+
+try{
+
+if(!id){
+
+mostrarErro(
+"ID inválido"
+);
+
+return;
+
+}
+
+let req =
+await fetch(
+
+baseURL+
+"cwjogos/"+id+".json"
+
+);
+
+let data =
+await req.json();
+
+if(!data){
+
+mostrarErro(
+"Live não encontrada"
+);
+
+return;
+
+}
+
+/* =====================================
+INFO
+===================================== */
+
+document.title =
+
+(data.ht || "LIVE")+
+
+" x "+
+
+(data.at || "");
+
+document.querySelector(
+".logo"
+).innerHTML =
+
+(data.ht || "LIVE")+
+
+" x "+
+
+(data.at || "");
+
+infoLive.innerHTML =
+
+"🏆 "+
+
+(data.dt || "Ao vivo")+
+
+"<br>⏱ "+
+
+(data.started || "Agora")+
+
+"<div class='teams'>" +
+
+"<div class='team'>" +
+
+"<img src='"+(data.imgh || "")+"'>" +
+
+"<span>"+(data.ht || "")+"</span>" +
+
+"</div>" +
+
+"<div class='vs'>VS</div>" +
+
+"<div class='team'>" +
+
+"<img src='"+(data.imga || "")+"'>" +
+
+"<span>"+(data.at || "")+"</span>" +
+
+"</div>" +
+
+"</div>";
+
+/* =====================================
+URL
+===================================== */
+
+LIVE_URL =
+decodeURIComponent(
+data.urlServer || ""
+);
+
+if(!LIVE_URL){
+
+mostrarErro(
+"Transmissão indisponível"
+);
+
+return;
+
+}
+
+/* =====================================
+OPEN BUTTON
+===================================== */
+
+btnOpen.onclick =
+function(){
+
+try{
+
+/* ANDROID */
+
+if(window.Android){
+
+Android.openExternal(
+LIVE_URL
+);
+
+}else{
+
+window.open(
+LIVE_URL,
+"_blank"
+);
+
+}
+
+}catch(e){
+
+window.open(
+LIVE_URL,
+"_blank"
+);
+
+}
+
+};
+
+/* =====================================
+TIPOS
+===================================== */
+
+if(
+LIVE_URL.includes(".m3u8")
+){
+
+criarHLS(
+LIVE_URL
+);
+
+return;
+
+}
+
+if(
+
+LIVE_URL.includes(".mp4") ||
+
+LIVE_URL.includes(".webm")
+
+){
+
+criarVideo(
+LIVE_URL
+);
+
+return;
+
+}
+
+/* =====================================
+IFRAME
+===================================== */
+
+criarIframe(
+LIVE_URL
+);
+
+}catch(e){
+
+console.log(e);
+
+mostrarErro(
+"Erro ao iniciar live"
+);
+
+}
+
+}
+
+/* =====================================
+IFRAME
+===================================== */
+
+function criarIframe(url){
+
+loading.style.display =
+"block";
+
+let iframe =
+document.createElement(
+"iframe"
+);
+
+iframe.src =
+url;
+
+iframe.allow =
+"autoplay; fullscreen; encrypted-media";
+
+iframe.allowFullscreen =
+true;
+
+iframe.setAttribute(
+"allowfullscreen",
+"true"
+);
+
+iframe.setAttribute(
+"webkitallowfullscreen",
+"true"
+);
+
+iframe.setAttribute(
+"mozallowfullscreen",
+"true"
+);
+
+iframe.referrerPolicy =
+"origin";
+
+iframe.onload =
+function(){
+
+loading.style.display =
+"none";
+
+};
+
+iframe.onerror =
+function(){
+
+mostrarErro(
+"Iframe bloqueado"
+);
+
+};
+
+videoContainer.appendChild(
+iframe
+);
+
+}
+
+/* =====================================
+HLS
+===================================== */
+
+function criarHLS(url){
+
+loading.style.display =
+"block";
+
+let video =
+document.createElement(
+"video"
+);
+
+video.controls =
+true;
+
+video.autoplay =
+true;
+
+video.muted =
+true;
+
+video.playsInline =
+true;
+
+video.setAttribute(
+"playsinline",
+"true"
+);
+
+video.setAttribute(
+"webkit-playsinline",
+"true"
+);
+
+videoContainer.appendChild(
+video
+);
+
+if(Hls.isSupported()){
+
+let hls =
+new Hls({
+
+enableWorker:true,
+
+lowLatencyMode:true
+
+});
+
+hls.loadSource(
+url
+);
+
+hls.attachMedia(
+video
+);
+
+hls.on(
+
+Hls.Events.MANIFEST_PARSED,
+
+function(){
+
+loading.style.display =
+"none";
+
+video.play();
+
+}
+
+);
+
+hls.on(
+
+Hls.Events.ERROR,
+
+function(event,data){
+
+console.log(data);
+
+mostrarErro(
+"Erro na transmissão"
+);
+
+}
+
+);
+
+}else if(video.canPlayType(
+'application/vnd.apple.mpegurl'
+)){
+
+video.src =
+url;
+
+video.addEventListener(
+'loadedmetadata',
+function(){
+
+loading.style.display =
+"none";
+
+video.play();
+
+}
+);
+
+}else{
+
+mostrarErro(
+"HLS não suportado"
+);
+
+}
+
+}
+
+/* =====================================
+VIDEO NORMAL
+===================================== */
+
+function criarVideo(url){
+
+loading.style.display =
+"block";
+
+let video =
+document.createElement(
+"video"
+);
+
+video.src =
+url;
+
+video.controls =
+true;
+
+video.autoplay =
+true;
+
+video.muted =
+true;
+
+video.playsInline =
+true;
+
+video.setAttribute(
+"playsinline",
+"true"
+);
+
+video.setAttribute(
+"webkit-playsinline",
+"true"
+);
+
+video.onloadeddata =
+function(){
+
+loading.style.display =
+"none";
+
+video.play();
+
+};
+
+video.onerror =
+function(){
+
+mostrarErro(
+"Erro vídeo"
+);
+
+};
+
+videoContainer.appendChild(
+video
+);
+
+}
+
+/* =====================================
+ERRO
+===================================== */
+
+function mostrarErro(msg){
+
+loading.style.display =
+"none";
+
+erro.style.display =
+"block";
+
+erro.innerHTML =
+msg;
+
+}
+
+/* =====================================
+WHATSAPP
+===================================== */
+
+function abrirWhatsappPagamento(){
+
+let mensagem =
+
+"🎬 PAGAMENTO WBCINE\n\n"+
+
+"🆔 ID:\n"+
+
+deviceId+
+
+"\n\n💰 Quero ativar premium.";
+
+let url =
+
+"https://wa.me/258865335028?text="+
+
+encodeURIComponent(
+mensagem
+);
+
+try{
+
+if(window.Android){
+
+Android.openExternal(
+url
+);
+
+}else{
+
+window.open(
+url,
+"_blank"
+);
+
+}
+
+}catch(e){
+
+window.open(
+url,
+"_blank"
+);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

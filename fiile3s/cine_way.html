@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Cine Way</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#0b0b0b;
+color:white;
+font-family:Arial,Helvetica,sans-serif;
+padding-bottom:95px;
+overflow-x:hidden;
+}
+
+/* ================= HEADER ================= */
+
+header{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:65px;
+background:rgba(0,0,0,0.95);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 16px;
+z-index:999;
+border-bottom:1px solid #1f1f1f;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:22px;
+font-weight:bold;
+}
+
+.logo i{
+color:#ff7a18;
+}
+
+.logo span{
+background:linear-gradient(
+90deg,
+#ff7a18,
+#ffb347
+);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.header-actions{
+display:flex;
+gap:12px;
+align-items:center;
+}
+
+.icon-btn{
+width:38px;
+height:38px;
+border-radius:12px;
+background:#161616;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:16px;
+color:#ff7a18;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+margin-top:70px;
+padding:0 15px;
+}
+
+#carousel{
+display:flex;
+overflow-x:auto;
+gap:16px;
+scroll-behavior:smooth;
+padding-bottom:5px;
+}
+
+#carousel::-webkit-scrollbar{
+display:none;
+}
+
+.hero-card{
+position:relative;
+min-width:350px;
+height:230px;
+border-radius:24px;
+overflow:hidden;
+flex-shrink:0;
+background:#151515;
+}
+
+.hero-card img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+.hero-overlay{
+position:absolute;
+left:0;
+right:0;
+bottom:0;
+padding:20px;
+background:linear-gradient(
+transparent,
+rgba(0,0,0,0.92)
+);
+}
+
+.hero-badge{
+display:inline-block;
+background:#ff7a18;
+padding:5px 10px;
+border-radius:10px;
+font-size:12px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.hero-title{
+font-size:25px;
+font-weight:bold;
+margin-bottom:6px;
+}
+
+.hero-meta{
+display:flex;
+gap:10px;
+font-size:13px;
+color:#ddd;
+}
+
+/* ================= SECTION ================= */
+
+.section{
+margin-top:22px;
+}
+
+.section-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 15px 10px;
+}
+
+.section-title{
+font-size:20px;
+font-weight:bold;
+}
+
+.section-link{
+font-size:13px;
+color:#ff7a18;
+}
+
+/* ================= SCROLL ================= */
+
+.scroll-x{
+display:flex;
+gap:14px;
+overflow-x:auto;
+padding:0 15px;
+scroll-behavior:smooth;
+}
+
+.scroll-x::-webkit-scrollbar{
+display:none;
+}
+
+/* ================= CARD ================= */
+
+.media-card{
+min-width:170px;
+max-width:170px;
+background:#141414;
+border-radius:18px;
+overflow:hidden;
+flex-shrink:0;
+border:1px solid #1d1d1d;
+}
+
+.poster{
+width:100%;
+height:250px;
+position:relative;
+overflow:hidden;
+}
+
+.poster img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+.poster-shadow{
+position:absolute;
+left:0;
+right:0;
+bottom:0;
+height:70px;
+background:linear-gradient(
+transparent,
+rgba(0,0,0,0.95)
+);
+}
+
+.top-badge{
+position:absolute;
+top:10px;
+left:10px;
+background:#ff7a18;
+padding:5px 8px;
+border-radius:8px;
+font-size:10px;
+font-weight:bold;
+}
+
+.views-badge{
+position:absolute;
+top:10px;
+right:10px;
+background:rgba(0,0,0,0.7);
+padding:5px 8px;
+border-radius:8px;
+font-size:10px;
+}
+
+.media-info{
+padding:12px;
+}
+
+.media-title{
+font-size:15px;
+font-weight:bold;
+line-height:1.3;
+height:38px;
+overflow:hidden;
+margin-bottom:8px;
+}
+
+.media-meta{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:12px;
+color:#aaa;
+}
+
+.lang{
+color:#ffb347;
+font-weight:bold;
+}
+
+/* ================= VER MAIS ================= */
+
+.more-card{
+min-width:170px;
+height:334px;
+border-radius:20px;
+background:linear-gradient(
+135deg,
+#ff7a18,
+#ff4500
+);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+font-weight:bold;
+font-size:18px;
+color:white;
+flex-shrink:0;
+}
+
+.more-card i{
+font-size:36px;
+margin-bottom:10px;
+}
+
+/* ================= CATEGORIAS ================= */
+
+.categorias{
+display:flex;
+gap:12px;
+overflow-x:auto;
+padding:0 15px;
+}
+
+.categorias::-webkit-scrollbar{
+display:none;
+}
+
+.cat-card{
+min-width:145px;
+height:48px;
+border-radius:15px;
+background:#151515;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+color:#ff7a18;
+border:1px solid #1f1f1f;
+}
+
+/* ================= JOGOS ================= */
+
+.jogo-card{
+min-width:270px;
+background:#151515;
+border-radius:18px;
+padding:14px;
+flex-shrink:0;
+border:1px solid #1f1f1f;
+}
+
+.jogo-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.team{
+display:flex;
+flex-direction:column;
+align-items:center;
+font-size:12px;
+width:90px;
+text-align:center;
+}
+
+.team img{
+width:50px;
+height:50px;
+object-fit:contain;
+margin-bottom:6px;
+}
+
+.vs{
+width:38px;
+height:38px;
+border-radius:50%;
+background:#ff7a18;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+}
+
+.jogo-bottom{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:12px;
+color:#bbb;
+}
+
+.live{
+background:red;
+padding:4px 8px;
+border-radius:8px;
+font-size:11px;
+font-weight:bold;
+}
+
+/* ================= NAV ================= */
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:75px;
+background:#111;
+display:flex;
+justify-content:space-around;
+align-items:center;
+border-top:1px solid #1f1f1f;
+z-index:999;
+}
+
+.bottom-nav a{
+color:#888;
+font-size:11px;
+display:flex;
+flex-direction:column;
+align-items:center;
+text-decoration:none;
+}
+
+.bottom-nav a.active{
+color:#ff7a18;
+}
+
+.bottom-nav i{
+font-size:20px;
+margin-bottom:4px;
+}
+
+/* ================= POPUP ================= */
+
+#popupJogo{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.85);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+padding:20px;
+}
+
+.popup-box{
+width:100%;
+max-width:320px;
+background:#161616;
+border-radius:20px;
+padding:25px;
+text-align:center;
+border:1px solid #2a2a2a;
+}
+
+.popup-box button{
+width:100%;
+height:48px;
+border:none;
+border-radius:14px;
+background:#ff7a18;
+color:white;
+font-weight:bold;
+font-size:15px;
+}
+
+a{
+text-decoration:none;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo">
+<i class="fa fa-play-circle"></i>
+<span>Cine Way</span>
+</div>
+
+<div class="header-actions">
+
+<div class="icon-btn">
+<i class="fa fa-bell"></i>
+</div>
+
+<a href="pesquisar.html">
+<div class="icon-btn">
+<i class="fa fa-search"></i>
+</div>
+</a>
+
+</div>
+
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div id="carousel"></div>
+
+</section>
+
+<!-- CATEGORIAS -->
+
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+Categorias
+</div>
+
+</div>
+
+<div class="categorias">
+
+<a href="categoria.html?type=filme">
+<div class="cat-card">🎬 Filmes</div>
+</a>
+
+<a href="categoria.html?type=serie">
+<div class="cat-card">📺 Séries</div>
+</a>
+
+<a href="categoria.html?type=anime">
+<div class="cat-card">🔥 Animes</div>
+</a>
+
+</div>
+
+</section>
+
+<!-- JOGOS -->
+
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+Jogos Ao Vivo
+</div>
+
+<a href="jogos.html"
+class="section-link">
+Ver Todos
+</a>
+
+</div>
+
+<div class="scroll-x"
+id="jogos"></div>
+
+</section>
+
+<!-- LANÇAMENTOS -->
+
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+Novos Lançamentos
+</div>
+
+</div>
+
+<div class="scroll-x"
+id="lancamentos"></div>
+
+</section>
+
+<!-- MAIS ASSISTIDOS -->
+
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+Mais Assistidos
+</div>
+
+</div>
+
+<div class="scroll-x"
+id="maisAssistidos"></div>
+
+</section>
+
+<!-- FILMES -->
+
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+Filmes
+</div>
+
+<a href="categoria.html?type=filme"
+class="section-link">
+Ver Mais
+</a>
+
+</div>
+
+<div class="scroll-x"
+id="filmes"></div>
+
+</section>
+
+<!-- SERIES -->
+
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+Séries
+</div>
+
+<a href="categoria.html?type=serie"
+class="section-link">
+Ver Mais
+</a>
+
+</div>
+
+<div class="scroll-x"
+id="series"></div>
+
+</section>
+
+<!-- ANIMES -->
+
+<section class="section">
+
+<div class="section-head">
+
+<div class="section-title">
+Animes
+</div>
+
+<a href="categoria.html?type=anime"
+class="section-link">
+Ver Mais
+</a>
+
+</div>
+
+<div class="scroll-x"
+id="animes"></div>
+
+</section>
+
+<!-- NAV -->
+
+<nav class="bottom-nav">
+
+<a class="active">
+<i class="fa fa-house"></i>
+<span>Casa</span>
+</a>
+
+<a href="pesquisar.html">
+<i class="fa fa-search"></i>
+<span>Pesquisar</span>
+</a>
+
+<a href="jogos.html">
+<i class="fa fa-futbol"></i>
+<span>Jogos</span>
+</a>
+
+<a href="conta.html">
+<i class="fa fa-user"></i>
+<span>Conta</span>
+</a>
+
+</nav>
+
+<!-- POPUP -->
+
+<div id="popupJogo">
+
+<div class="popup-box">
+
+<h3>
+O jogo ainda não começou
+</h3>
+
+<p>
+Aguarde o horário da partida.
+</p>
+
+<button onclick="fecharPopup()">
+Fechar
+</button>
+
+</div>
+
+</div>
+  
+ <!-- ================= MANUTENÇÃO ================= -->
+
+<div id="manutencaoBox"
+style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.97);
+z-index:999999;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+">
+
+<div style="
+width:100%;
+max-width:360px;
+background:#141414;
+border-radius:25px;
+padding:30px 25px;
+text-align:center;
+border:1px solid #2a2a2a;
+box-shadow:0 0 30px rgba(0,0,0,0.7);
+">
+
+<div style="
+font-size:70px;
+margin-bottom:15px;
+">
+🛠
+</div>
+
+<h1 style="
+font-size:26px;
+margin-bottom:15px;
+color:#ff7a18;
+">
+Sistema em Manutenção
+</h1>
+
+<p style="
+line-height:1.8;
+color:#ccc;
+font-size:15px;
+">
+
+Desculpe pelos transtornos causados.<br><br>
+
+Estamos realizando manutenção no sistema para melhorar a experiência do aplicativo.
+
+</p>
+
+<a
+href="https://wa.me/258865335028"
+target="_blank"
+style="
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+margin-top:25px;
+width:100%;
+height:55px;
+background:#25D366;
+border-radius:15px;
+text-decoration:none;
+color:white;
+font-weight:bold;
+font-size:16px;
+">
+
+<i class="fab fa-whatsapp"></i>
+
+Contatar no WhatsApp
+
+</a>
+
+<div style="
+margin-top:18px;
+font-size:13px;
+color:#777;
+line-height:1.6;
+">
+
+Tente novamente mais tarde.
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+/* ===================================== */
+/* MANUTENÇÃO */
+/* ===================================== */
+
+async function verificarManutencao(){
+
+try{
+
+var response =
+await fetch(
+"https://cwmedia-ead7c-default-rtdb.firebaseio.com/manuteb3s.json"
+);
+
+var status =
+await response.json();
+
+console.log(
+"MANUTENCAO:",
+status
+);
+
+if(status === true){
+
+document.getElementById(
+"manutencaoBox"
+).style.display = "flex";
+
+document.body.style.overflow =
+"hidden";
+
+}else{
+
+document.getElementById(
+"manutencaoBox"
+).style.display = "none";
+
+}
+
+}catch(e){
+
+console.log(
+"ERRO MANUTENCAO:",
+e
+);
+
+}
+
+}
+/* ===================================== */
+/* BASE */
+/* ===================================== */
+
+var baseURL =
+"https://cwmedia-ead7c-default-rtdb.firebaseio.com/cmdia/";
+
+/* ===================================== */
+/* CARD */
+/* ===================================== */
+
+function criarCard(
+item,
+badge,
+link
+){
+
+return `
+
+<a href="${link}">
+
+<div class="media-card">
+
+<div class="poster">
+
+<img src="${item.imgurl || ''}">
+
+<div class="poster-shadow"></div>
+
+<div class="top-badge">
+${badge}
+</div>
+
+<div class="views-badge">
+👁 ${item.views || 0}
+</div>
+
+</div>
+
+<div class="media-info">
+
+<div class="media-title">
+${item.title || 'Sem título'}
+</div>
+
+<div class="media-meta">
+
+<span>
+${item.ano || '--'}
+</span>
+
+<span class="lang">
+${item.lang || 'DB'}
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</a>
+
+`;
+
+}
+
+/* ===================================== */
+/* VER MAIS */
+/* ===================================== */
+
+function cardVerMais(link){
+
+return `
+
+<a href="${link}">
+
+<div class="more-card">
+
+<i class="fa fa-plus"></i>
+
+Ver Mais
+
+</div>
+
+</a>
+
+`;
+
+}
+
+/* ===================================== */
+/* HERO */
+/* ===================================== */
+
+async function carregarHero(){
+
+try{
+
+var filmes =
+await fetch(
+baseURL+"cwfilmes.json"
+).then(function(r){
+return r.json();
+});
+
+var lista = [];
+
+Object.values(filmes || {})
+.forEach(function(f){
+
+lista.push({
+
+title:f.title,
+ano:f.ano,
+img:f.imgurl,
+
+link:
+"assistir.html?title=" +
+encodeURIComponent(f.title) +
+"&video=" +
+encodeURIComponent(f.urlServer)
+
+});
+
+});
+
+var carousel =
+document.getElementById(
+"carousel"
+);
+
+carousel.innerHTML = "";
+
+lista.slice(0,5)
+.forEach(function(item){
+
+carousel.innerHTML += `
+
+<a href="${item.link}">
+
+<div class="hero-card">
+
+<img src="${item.img}">
+
+<div class="hero-overlay">
+
+<div class="hero-badge">
+Novo
+</div>
+
+<div class="hero-title">
+${item.title}
+</div>
+
+<div class="hero-meta">
+
+<span>
+${item.ano}
+</span>
+
+<span>
+⭐ Destaque
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</a>
+
+`;
+
+});
+
+}catch(e){
+
+console.log(
+"ERRO HERO:",
+e
+);
+
+}
+
+}
+
+/* ===================================== */
+/* FILMES */
+/* ===================================== */
+
+async function carregarFilmes(){
+
+try{
+
+var data =
+await fetch(
+baseURL+"cwfilmes.json"
+).then(function(r){
+return r.json();
+});
+
+var container =
+document.getElementById(
+"filmes"
+);
+
+container.innerHTML = "";
+
+Object.values(data || {})
+.slice(0,10)
+.forEach(function(f){
+
+container.innerHTML +=
+criarCard(
+f,
+"Filme",
+"assistir.html?title=" +
+encodeURIComponent(f.title) +
+"&video=" +
+encodeURIComponent(f.urlServer)
+);
+
+});
+
+container.innerHTML +=
+cardVerMais(
+"categoria.html?type=filme"
+);
+
+}catch(e){
+
+console.log(
+"ERRO FILMES:",
+e
+);
+
+}
+
+}
+
+/* ===================================== */
+/* SERIES */
+/* ===================================== */
+
+async function carregarSeries(){
+
+try{
+
+var data =
+await fetch(
+baseURL+"cwseries.json"
+).then(function(r){
+return r.json();
+});
+
+var container =
+document.getElementById(
+"series"
+);
+
+container.innerHTML = "";
+
+Object.keys(data || {})
+.slice(0,10)
+.forEach(function(id){
+
+var s = data[id];
+
+container.innerHTML +=
+criarCard(
+s,
+"Série",
+"show_serie.html?id="+id
+);
+
+});
+
+container.innerHTML +=
+cardVerMais(
+"categoria.html?type=serie"
+);
+
+}catch(e){
+
+console.log(
+"ERRO SERIES:",
+e
+);
+
+}
+
+}
+
+/* ===================================== */
+/* ANIMES */
+/* ===================================== */
+
+async function carregarAnimes(){
+
+try{
+
+var data =
+await fetch(
+baseURL+"cwanimes.json"
+).then(function(r){
+return r.json();
+});
+
+var container =
+document.getElementById(
+"animes"
+);
+
+container.innerHTML = "";
+
+Object.keys(data || {})
+.slice(0,10)
+.forEach(function(id){
+
+var a = data[id];
+
+var link = "";
+
+if(a.temps){
+
+link =
+"show_serie.html?id="+id+
+"&type=anime";
+
+}else{
+
+link =
+"assistir.html?title=" +
+encodeURIComponent(a.title) +
+"&video=" +
+encodeURIComponent(a.urlServer);
+
+}
+
+container.innerHTML +=
+criarCard(
+a,
+"Anime",
+link
+);
+
+});
+
+container.innerHTML +=
+cardVerMais(
+"categoria.html?type=anime"
+);
+
+}catch(e){
+
+console.log(
+"ERRO ANIMES:",
+e
+);
+
+}
+
+}
+
+/* ===================================== */
+/* LANÇAMENTOS */
+/* ===================================== */
+
+async function carregarLancamentos(){
+
+try{
+
+var data =
+await fetch(
+baseURL+"cwfilmes.json"
+).then(function(r){
+return r.json();
+});
+
+var container =
+document.getElementById(
+"lancamentos"
+);
+
+container.innerHTML = "";
+
+Object.values(data || {})
+.slice(0,10)
+.forEach(function(f){
+
+container.innerHTML +=
+criarCard(
+f,
+"Lançamento",
+"assistir.html?title=" +
+encodeURIComponent(f.title) +
+"&video=" +
+encodeURIComponent(f.urlServer)
+);
+
+});
+
+}catch(e){
+
+console.log(
+"ERRO LANÇAMENTOS:",
+e
+);
+
+}
+
+}
+
+/* ===================================== */
+/* MAIS ASSISTIDOS */
+/* ===================================== */
+
+async function carregarMaisAssistidos(){
+
+try{
+
+var data =
+await fetch(
+baseURL+"cwfilmes.json"
+).then(function(r){
+return r.json();
+});
+
+var lista =
+Object.values(data || {});
+
+lista.sort(function(a,b){
+
+return parseInt(
+b.views || 0
+)
+-
+parseInt(
+a.views || 0
+);
+
+});
+
+var container =
+document.getElementById(
+"maisAssistidos"
+);
+
+container.innerHTML = "";
+
+lista.slice(0,10)
+.forEach(function(f){
+
+container.innerHTML +=
+criarCard(
+f,
+"Top",
+"assistir.html?title=" +
+encodeURIComponent(f.title) +
+"&video=" +
+encodeURIComponent(f.urlServer)
+);
+
+});
+
+}catch(e){
+
+console.log(
+"ERRO MAIS:",
+e
+);
+
+}
+
+}
+
+/* ===================================== */
+/* JOGOS */
+/* ===================================== */
+
+async function carregarJogos(){
+
+try{
+
+var data =
+await fetch(
+baseURL+"cwjogos.json"
+).then(function(r){
+return r.json();
+});
+
+var container =
+document.getElementById(
+"jogos"
+);
+
+container.innerHTML = "";
+
+Object.keys(data || {})
+.forEach(function(id){
+
+var j = data[id];
+
+container.innerHTML += `
+
+<div class="jogo-card"
+onclick="abrirJogo('${id}')">
+
+<div class="jogo-top">
+
+<div class="team">
+
+<img src="${j.imgh}">
+
+<span>${j.ht}</span>
+
+</div>
+
+<div class="vs">
+VS
+</div>
+
+<div class="team">
+
+<img src="${j.imga}">
+
+<span>${j.at}</span>
+
+</div>
+
+</div>
+
+<div class="jogo-bottom">
+
+<span>${j.dt}</span>
+
+<span class="live">
+AO VIVO
+</span>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}catch(e){
+
+console.log(
+"ERRO JOGOS:",
+e
+);
+
+}
+
+}
+
+/* ===================================== */
+/* ABRIR JOGO */
+/* ===================================== */
+
+function abrirJogo(id){
+
+window.location.href =
+"assistirjogo.html?id="+id;
+
+}
+
+/* ===================================== */
+/* POPUP */
+/* ===================================== */
+
+function fecharPopup(){
+
+document.getElementById(
+"popupJogo"
+).style.display = "none";
+
+}
+
+/* ===================================== */
+/* START */
+/* ===================================== */
+
+window.onload = async function(){
+
+await verificarManutencao();
+
+carregarHero();
+
+carregarFilmes();
+
+carregarSeries();
+
+carregarAnimes();
+
+carregarLancamentos();
+
+carregarMaisAssistidos();
+
+carregarJogos();
+
+};
+
+</script>
+
+</body>
+</html>

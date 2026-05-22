@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>CWMedia - Assistir</title>
+
+<!-- HLS -->
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+html,body{
+margin:0;
+padding:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#0f0f0f;
+color:white;
+overflow-x:hidden;
+overflow-y:auto;
+}
+
+/* HEADER */
+
+header{
+background:#000;
+padding:15px 20px;
+display:flex;
+align-items:center;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.logo{
+color:#e50914;
+font-size:24px;
+font-weight:bold;
+}
+
+/* CONTAINER */
+
+.player-container{
+width:95%;
+max-width:1200px;
+margin:auto;
+padding-bottom:50px;
+}
+
+/* PLAYER */
+
+.video-box{
+position:relative;
+width:100%;
+background:#000;
+margin-top:20px;
+border-radius:12px;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:220px;
+}
+
+video,
+iframe{
+width:100%;
+height:60vh;
+border:none;
+background:#000;
+}
+
+/* FULLSCREEN */
+
+.fullscreen-btn{
+position:absolute;
+bottom:10px;
+right:10px;
+background:rgba(0,0,0,0.7);
+border:none;
+color:white;
+font-size:18px;
+padding:10px 14px;
+cursor:pointer;
+border-radius:8px;
+}
+
+/* COUNTER */
+
+#videoRCount{
+margin-top:10px;
+display:flex;
+justify-content:flex-end;
+color:#ffb347;
+font-weight:bold;
+}
+
+/* DOWNLOAD */
+
+.download-box{
+margin-top:20px;
+background:#1b1b1b;
+border-radius:15px;
+padding:15px;
+border:1px solid #2a2a2a;
+}
+
+.download-box button{
+background:#e50914;
+border:none;
+color:white;
+padding:12px 20px;
+font-size:16px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+width:100%;
+}
+
+/* INFO */
+
+.info{
+margin-top:20px;
+padding-bottom:20px;
+}
+
+#title{
+font-size:28px;
+margin-bottom:10px;
+}
+
+.meta{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:15px;
+}
+
+.meta span{
+background:#1c1c1c;
+padding:8px 14px;
+border-radius:20px;
+font-size:14px;
+color:#ffb347;
+}
+
+.sinopse-box{
+width:100%;
+color:#ddd;
+line-height:1.7;
+background:#161616;
+padding:15px;
+border-radius:12px;
+margin-top:15px;
+}
+
+/* BUTTONS */
+
+.btn-back{
+margin-top:20px;
+display:inline-block;
+padding:12px 20px;
+background:#e50914;
+color:white;
+text-decoration:none;
+border-radius:10px;
+font-weight:bold;
+}
+
+.btn-help{
+background:red;
+border-radius:10px;
+margin-top:20px;
+border:2px solid white;
+font-weight:bold;
+padding:12px;
+color:white;
+width:100%;
+cursor:pointer;
+}
+
+/* PAYWALL */
+
+.paywall{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.95);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+padding:20px;
+}
+
+.paybox{
+background:#111;
+padding:25px;
+border-radius:14px;
+width:100%;
+max-width:320px;
+text-align:center;
+border:1px solid #2a2a2a;
+}
+
+.paybox button{
+margin-top:15px;
+padding:12px;
+width:100%;
+background:#e50914;
+border:none;
+color:white;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+CWMedia
+</div>
+
+</header>
+
+<div class="player-container">
+
+<!-- PLAYER -->
+
+<div class="video-box"
+id="videoBox">
+
+</div>
+
+<!-- VIEWS -->
+
+<div id="videoRCount">
+
+</div>
+
+<!-- DOWNLOAD -->
+
+<div class="download-box">
+
+<button onclick="baixarVideo()">
+
+⬇ Baixar Vídeo
+
+</button>
+
+<p>
+Para baixar melhor use ADM.
+</p>
+
+</div>
+
+<!-- INFO -->
+
+<div class="info">
+
+<h1 id="title">
+
+Carregando...
+
+</h1>
+
+<div class="meta">
+
+<span id="anoBox">
+Ano: --
+</span>
+
+<span id="langBox">
+Idioma: --
+</span>
+
+<span id="addedBox">
+Publicado: --
+</span>
+
+</div>
+
+<div class="sinopse-box"
+id="sinopseBox">
+
+Sinopse não disponível.
+
+</div>
+
+<p id="desc">
+
+Reproduzindo agora
+
+</p>
+
+<a href="cine_way.html"
+class="btn-back">
+
+⬅ Voltar
+
+</a>
+
+<br>
+
+<button class="btn-help"
+onclick="abrirWhatsappPagamento()">
+
+Estou Com Problema em Usar o App - falar via whatsapp
+
+</button>
+
+</div>
+
+</div>
+
+<!-- PAYWALL -->
+
+<div class="paywall"
+id="paywall">
+
+<div class="paybox">
+
+<div style="
+font-size:55px;
+margin-bottom:10px;
+">
+🔒
+</div>
+
+<h2 style="
+margin:0;
+margin-bottom:10px;
+color:#fff;
+">
+
+Conteúdo Premium
+
+</h2>
+
+<p style="
+color:#bbb;
+line-height:1.6;
+margin-bottom:20px;
+">
+
+Seu tempo grátis terminou.<br>
+Assine agora e tenha acesso completo durante 2 semanas.
+
+</p>
+
+<div style="
+background:#1b1b1b;
+padding:15px;
+border-radius:12px;
+margin-bottom:20px;
+border:1px solid #2d2d2d;
+">
+
+<div style="
+font-size:30px;
+font-weight:bold;
+color:#ffb347;
+">
+
+50 MT
+
+</div>
+
+<div style="
+margin-top:5px;
+color:#aaa;
+">
+
+Acesso Premium - 2 Semanas
+
+</div>
+
+</div>
+
+<button onclick="abrirWhatsappPagamento()"
+style="
+width:100%;
+height:52px;
+border:none;
+border-radius:12px;
+background:#25D366;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+">
+
+💬 Fazer Pagamento via WhatsApp
+
+</button>
+
+<div style="
+margin-top:18px;
+font-size:13px;
+color:#777;
+line-height:1.5;
+">
+
+Após o pagamento o acesso premium será ativado.
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================================
+BASE FIREBASE
+========================================= */
+
+var baseURL =
+"https://cwmedia-ead7c-default-rtdb.firebaseio.com/cmdia/";
+
+var signerURL =
+"https://cwmedia-ead7c-default-rtdb.firebaseio.com/signers/";
+
+/* =========================================
+PEGAR PARAMETROS
+========================================= */
+
+function getParam(nome){
+
+    var url =
+    new URL(window.location.href);
+
+    return url.searchParams.get(nome);
+
+}
+
+var videoUrl =
+getParam("video");
+
+var videoTitle =
+getParam("title");
+
+/* =========================================
+ELEMENTOS
+========================================= */
+
+var videoBox =
+document.getElementById("videoBox");
+
+var titleBox =
+document.getElementById("title");
+
+var anoBox =
+document.getElementById("anoBox");
+
+var langBox =
+document.getElementById("langBox");
+
+var addedBox =
+document.getElementById("addedBox");
+
+var sinopseBox =
+document.getElementById("sinopseBox");
+
+var videoRCount =
+document.getElementById("videoRCount");
+
+/* =========================================
+TEMPO FREE
+========================================= */
+
+var TEMPO_FREE_TOTAL =
+15 * 60;
+
+var timerInterval =
+null;
+
+/* =========================================
+CRIAR TIMER
+========================================= */
+
+var timerBox =
+document.createElement("div");
+
+timerBox.style.position =
+"fixed";
+
+timerBox.style.top =
+"80px";
+
+timerBox.style.right =
+"15px";
+
+timerBox.style.background =
+"rgba(0,0,0,0.85)";
+
+timerBox.style.padding =
+"10px 14px";
+
+timerBox.style.borderRadius =
+"12px";
+
+timerBox.style.zIndex =
+"9999";
+
+timerBox.style.fontWeight =
+"bold";
+
+timerBox.style.border =
+"1px solid #333";
+
+timerBox.style.color =
+"#ffb347";
+
+document.body.appendChild(
+timerBox
+);
+
+/* =========================================
+DEVICE ID
+========================================= */
+
+function getDeviceId(){
+
+    try{
+
+        if(window.Android){
+
+            var id =
+            Android.getDeviceId();
+
+            if(id){
+                return id;
+            }
+
+        }
+
+    }catch(e){}
+
+    var localId =
+    localStorage.getItem(
+    "cw_device_id"
+    );
+
+    if(localId){
+        return localId;
+    }
+
+    var novoId =
+    "CW-" + new Date().getTime();
+
+    localStorage.setItem(
+    "cw_device_id",
+    novoId
+    );
+
+    return novoId;
+
+}
+
+var DEVICE_ID =
+getDeviceId();
+
+/* =========================================
+VERIFICAR PREMIUM
+========================================= */
+
+async function verificarPremium(){
+
+    try{
+
+        var response =
+        await fetch(
+
+            signerURL +
+            DEVICE_ID +
+            ".json"
+
+        );
+
+        var data =
+        await response.json();
+
+        if(!data){
+            return false;
+        }
+
+        if(data.premium !== true){
+            return false;
+        }
+
+        var expired =
+        data.expired;
+
+        if(
+            expired === 0 ||
+            expired === "0" ||
+            expired == null ||
+            expired === ""
+        ){
+
+            return false;
+
+        }
+
+        var dataFormatada =
+        expired.replace(
+            " ",
+            "T"
+        );
+
+        var validade =
+        new Date(
+            dataFormatada
+        );
+
+        if(
+            isNaN(
+                validade.getTime()
+            )
+        ){
+
+            return false;
+
+        }
+
+        var agora =
+        new Date();
+
+        if(
+            agora.getTime()
+            <
+            validade.getTime()
+        ){
+
+            timerBox.style.display =
+            "none";
+
+            return true;
+
+        }
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+    return false;
+
+}
+
+/* =========================================
+PEGAR TEMPO
+========================================= */
+
+function pegarTempoLocal(){
+
+    var tempo =
+    localStorage.getItem(
+    "cw_free_time"
+    );
+
+    if(tempo == null){
+
+        localStorage.setItem(
+        "cw_free_time",
+        TEMPO_FREE_TOTAL
+        );
+
+        return TEMPO_FREE_TOTAL;
+
+    }
+
+    return parseInt(tempo);
+
+}
+
+/* =========================================
+SALVAR FIREBASE
+========================================= */
+
+async function salvarTempoFirebase(segundos){
+
+    try{
+
+        await fetch(
+
+            signerURL +
+            DEVICE_ID +
+            "/freeTime.json",
+
+            {
+
+                method:"PUT",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify(
+                    segundos
+                )
+
+            }
+
+        );
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+}
+
+/* =========================================
+FORMATAR TEMPO
+========================================= */
+
+function formatarTempo(seg){
+
+    var min =
+    Math.floor(seg / 60);
+
+    var sec =
+    seg % 60;
+
+    if(sec < 10){
+
+        sec = "0" + sec;
+
+    }
+
+    return min + ":" + sec;
+
+}
+
+/* =========================================
+INICIAR TIMER
+========================================= */
+
+async function iniciarTimerFree(){
+
+    var premium =
+    await verificarPremium();
+
+    if(premium){
+        return;
+    }
+
+    var tempoRestante =
+    pegarTempoLocal();
+
+    timerBox.innerHTML =
+
+    "Tempo grátis: " +
+
+    formatarTempo(
+    tempoRestante
+    );
+
+    timerInterval =
+    setInterval(function(){
+
+        tempoRestante--;
+
+        if(tempoRestante < 0){
+
+            tempoRestante = 0;
+
+        }
+
+        timerBox.innerHTML =
+
+        "Tempo grátis: " +
+
+        formatarTempo(
+        tempoRestante
+        );
+
+        localStorage.setItem(
+
+            "cw_free_time",
+
+            tempoRestante
+
+        );
+
+        salvarTempoFirebase(
+        tempoRestante
+        );
+
+        if(tempoRestante <= 0){
+
+            clearInterval(
+            timerInterval
+            );
+
+            bloquearPlayer();
+
+        }
+
+    },1000);
+
+}
+
+/* =========================================
+BLOQUEAR PLAYER
+========================================= */
+
+function bloquearPlayer(){
+
+    try{
+
+        var video =
+        document.querySelector(
+        "video"
+        );
+
+        if(video){
+
+            video.pause();
+
+        }
+
+    }catch(e){}
+
+    document.getElementById(
+    "paywall"
+    ).style.display =
+    "flex";
+
+}
+
+/* =========================================
+AUMENTAR VIEW
+========================================= */
+
+async function aumentarViews(chaveAtual, viewsAtuais){
+
+    try{
+
+        var novoValor =
+        parseInt(
+            viewsAtuais || 0
+        ) + 1;
+
+        await fetch(
+
+            baseURL +
+            "cwfilmes/" +
+            chaveAtual +
+            "/views.json",
+
+            {
+
+                method:"PUT",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify(
+                    String(novoValor)
+                )
+
+            }
+
+        );
+
+        console.log(
+        "VIEW ADICIONADA"
+        );
+
+        videoRCount.innerHTML =
+
+        "👁 " +
+        novoValor +
+        " visualizações";
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+}
+
+/* =========================================
+CARREGAR VIDEO
+========================================= */
+
+async function carregarVideo(){
+
+    try{
+
+        if(!videoUrl){
+
+            titleBox.innerHTML =
+            "Vídeo não encontrado";
+
+            return;
+        }
+
+        var urlFinal =
+        decodeURIComponent(
+        videoUrl
+        );
+
+        /* =====================================
+        PLAYER HLS
+        ===================================== */
+
+        if(
+            urlFinal.includes(".m3u8")
+        ){
+
+            videoBox.innerHTML = `
+
+            <video
+            id="videoPlayer"
+            controls
+            autoplay
+            playsinline
+            webkit-playsinline
+            style="
+            width:100%;
+            height:60vh;
+            background:black;
+            ">
+            </video>
+
+            `;
+
+            var video =
+            document.getElementById(
+            "videoPlayer"
+            );
+
+            if(Hls.isSupported()){
+
+                var hls =
+                new Hls();
+
+                hls.loadSource(
+                urlFinal
+                );
+
+                hls.attachMedia(
+                video
+                );
+
+                hls.on(
+
+                    Hls.Events.MANIFEST_PARSED,
+
+                    function(){
+
+                        video.play();
+
+                    }
+
+                );
+
+            }else{
+
+                video.src =
+                urlFinal;
+
+                video.play();
+
+            }
+
+        }
+
+        /* =====================================
+        PLAYER NORMAL
+        ===================================== */
+
+        else{
+
+            videoBox.innerHTML = `
+
+            <video
+            id="videoPlayer"
+            controls
+            autoplay
+            playsinline
+            webkit-playsinline
+            controlsList="nodownload"
+            style="
+            width:100%;
+            height:60vh;
+            background:black;
+            ">
+
+            <source
+            src="${urlFinal}"
+            type="video/mp4">
+
+            </video>
+
+            `;
+
+        }
+
+        /* =====================================
+        BUSCAR INFO
+        ===================================== */
+
+        var response =
+        await fetch(
+        baseURL +
+        "cwfilmes.json"
+        );
+
+        var data =
+        await response.json();
+
+        var encontrado =
+        null;
+
+        var chave =
+        null;
+
+        Object.keys(data || {})
+        .forEach(function(key){
+
+            var f =
+            data[key];
+
+            if(
+
+                f.title &&
+
+                videoTitle &&
+
+                f.title.trim()
+
+                ==
+
+                decodeURIComponent(
+                videoTitle
+                ).trim()
+
+            ){
+
+                encontrado = f;
+
+                chave = key;
+
+            }
+
+        });
+
+        /* =====================================
+        MOSTRAR INFO
+        ===================================== */
+
+        if(encontrado){
+
+            titleBox.innerHTML =
+            encontrado.title ||
+            "Sem título";
+
+            anoBox.innerHTML =
+
+            "Ano: " +
+
+            (encontrado.ano || "--");
+
+            langBox.innerHTML =
+
+            "Idioma: " +
+
+            (encontrado.lang || "--");
+
+            addedBox.innerHTML =
+
+            "Publicado: " +
+
+            (encontrado.added || "--");
+
+            sinopseBox.innerHTML =
+
+            encontrado.sinopse ||
+
+            "Sem sinopse.";
+
+            /* =================================
+            VIEWS
+            ================================= */
+
+            await aumentarViews(
+
+                chave,
+
+                encontrado.views
+
+            );
+
+        }else{
+
+            titleBox.innerHTML =
+
+            decodeURIComponent(
+            videoTitle
+            );
+
+        }
+
+    }catch(e){
+
+        console.log(e);
+
+        titleBox.innerHTML =
+        "Erro ao carregar vídeo";
+
+    }
+
+}
+
+/* =========================================
+DOWNLOAD
+========================================= */
+
+function baixarVideo(){
+
+    if(videoUrl){
+
+        window.location.href =
+
+        decodeURIComponent(
+        videoUrl
+        );
+
+    }
+
+}
+
+/* =========================================
+WHATSAPP
+========================================= */
+
+function abrirWhatsappPagamento(){
+
+    var mensagem =
+
+    "🎬 PEDIDO DE ACESSO PREMIUM - CINE WAY\n\n" +
+
+    "🆔 ID DO USUÁRIO:\n*" +
+
+    DEVICE_ID +
+
+    "*\n\n💳 Quero fazer pagamento do acesso premium de 2 semanas no valor de 50MT.";
+
+    var texto =
+    encodeURIComponent(
+    mensagem
+    );
+
+    var numero =
+    "258865335028";
+
+    var link =
+
+    "https://wa.me/" +
+
+    numero +
+
+    "?text=" +
+
+    texto;
+
+    window.open(
+    link,
+    "_blank"
+    );
+
+}
+
+/* =========================================
+START
+========================================= */
+
+carregarVideo();
+
+iniciarTimerFree();
+
+</script>
+
+</body>
+</html>

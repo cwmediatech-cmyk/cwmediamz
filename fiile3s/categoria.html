@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cine Way</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#0b0b0b;
+color:white;
+font-family:Arial;
+padding-bottom:30px;
+overflow-x:hidden;
+}
+
+/* ===================== */
+/* HEADER */
+/* ===================== */
+
+header{
+height:65px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 15px;
+background:#000;
+position:sticky;
+top:0;
+z-index:50;
+box-shadow:0 2px 10px rgba(0,0,0,0.5);
+}
+
+.left{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.back-btn{
+width:38px;
+height:38px;
+border-radius:50%;
+background:#151515;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:17px;
+color:#ff7a18;
+text-decoration:none;
+}
+
+#titulo{
+font-size:20px;
+font-weight:bold;
+}
+
+/* ===================== */
+/* TOP INFO */
+/* ===================== */
+
+.top-info{
+padding:15px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+color:#aaa;
+font-size:13px;
+}
+
+/* ===================== */
+/* GRID */
+/* ===================== */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+padding:0 15px 15px;
+}
+
+/* ===================== */
+/* CARD */
+/* ===================== */
+
+.card{
+background:#151515;
+border-radius:18px;
+overflow:hidden;
+transition:0.3s;
+box-shadow:0 4px 12px rgba(0,0,0,0.35);
+}
+
+.card:hover{
+transform:scale(1.03);
+}
+
+.card img{
+width:100%;
+height:240px;
+object-fit:cover;
+object-position:top;
+display:block;
+}
+
+/* INFO */
+
+.card-info{
+padding:10px;
+}
+
+.card h4{
+font-size:15px;
+line-height:1.4;
+height:42px;
+overflow:hidden;
+display:-webkit-box;
+-webkit-line-clamp:2;
+-webkit-box-orient:vertical;
+margin-bottom:6px;
+}
+
+.card p{
+font-size:12px;
+color:#aaa;
+}
+
+/* BADGE */
+
+.badge{
+background:#ff7a18;
+padding:4px 8px;
+border-radius:7px;
+font-size:11px;
+display:inline-block;
+margin-bottom:8px;
+font-weight:bold;
+}
+
+/* EMPTY */
+
+.empty{
+padding:60px 20px;
+text-align:center;
+color:#777;
+grid-column:1/-1;
+}
+
+.empty i{
+font-size:65px;
+margin-bottom:15px;
+color:#222;
+}
+
+/* LOADING */
+
+.loading{
+padding:50px;
+text-align:center;
+color:#888;
+grid-column:1/-1;
+}
+
+.loading i{
+font-size:40px;
+animation:girar 1s linear infinite;
+}
+
+@keyframes girar{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
+/* LINKS */
+
+a{
+text-decoration:none;
+color:white;
+}
+
+/* RESPONSIVO */
+
+@media(min-width:700px){
+
+.grid{
+grid-template-columns:repeat(4,1fr);
+}
+
+.card img{
+height:300px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="left">
+
+<a href="cine_way.html" class="back-btn">
+<i class="fa fa-arrow-left"></i>
+</a>
+
+<h2 id="titulo">Carregando...</h2>
+
+</div>
+
+</header>
+
+<!-- INFO -->
+
+<div class="top-info">
+
+<span id="count">0 itens</span>
+
+<span id="tipoText"></span>
+
+</div>
+
+<!-- LISTA -->
+
+<section class="grid" id="lista">
+
+<div class="loading">
+
+<i class="fa fa-spinner"></i>
+
+<p>Carregando...</p>
+
+</div>
+
+</section>
+
+<script>
+
+const baseURL="https://cwmedia-ead7c-default-rtdb.firebaseio.com/cmdia/";
+
+/* ===================== */
+/* PARAMETROS */
+/* ===================== */
+
+const params = new URLSearchParams(window.location.search);
+
+const type = params.get("type");
+
+/* ===================== */
+/* DEFINIR */
+/* ===================== */
+
+let path="";
+let badge="";
+let titulo="";
+let tipoText="";
+
+if(type==="filme"){
+
+path="cwfilmes.json";
+badge="Filme";
+titulo="Filmes";
+tipoText="Todos os filmes";
+
+}
+
+if(type==="serie"){
+
+path="cwseries.json";
+badge="Série";
+titulo="Séries";
+tipoText="Todas as séries";
+
+}
+
+if(type==="anime"){
+
+path="cwanimes.json";
+badge="Anime";
+titulo="Animes";
+tipoText="Todos os animes";
+
+}
+
+document.getElementById("titulo").innerText=titulo;
+document.getElementById("tipoText").innerText=tipoText;
+
+/* ===================== */
+/* CARD */
+/* ===================== */
+
+function criarCard(item,id){
+
+let link="";
+let badgeText=badge;
+
+/* FILMES */
+
+if(type==="filme"){
+
+link=`assistir.html?title=${encodeURIComponent(item.title || "")}&video=${encodeURIComponent(item.urlServer || "")}`;
+
+}
+
+/* SERIES */
+
+if(type==="serie"){
+
+link=`show_serie.html?id=${id}`;
+
+}
+
+/* ANIMES */
+
+if(type==="anime"){
+
+if(item.temps){
+
+link=`show_serie.html?id=${id}&type=anime`;
+badgeText="Anime Série";
+
+}else{
+
+link=`assistir.html?title=${encodeURIComponent(item.title || "")}&video=${encodeURIComponent(item.urlServer || "")}`;
+
+badgeText="Anime Filme";
+
+}
+
+}
+
+return `
+
+<a href="${link}">
+
+<div class="card">
+
+<img src="${item.imgurl || ''}">
+
+<div class="card-info">
+
+<span class="badge">${badgeText}</span>
+
+<h4>${item.title || 'Sem título'}</h4>
+
+<p>${item.ano || '--'}</p>
+
+</div>
+
+</div>
+
+</a>
+
+`;
+
+}
+
+/* ===================== */
+/* CARREGAR */
+/* ===================== */
+
+fetch(baseURL+path)
+
+.then(r=>r.json())
+
+.then(data=>{
+
+const lista=document.getElementById("lista");
+
+lista.innerHTML="";
+
+let itens=Object.entries(data || {});
+
+/* ORDENAR MAIS RECENTES */
+
+itens.sort((a,b)=>{
+
+return new Date(b[1].added || 0)
+-
+new Date(a[1].added || 0);
+
+});
+
+/* CONTADOR */
+
+document.getElementById("count").innerText=
+itens.length+" itens";
+
+/* SEM DADOS */
+
+if(itens.length<=0){
+
+lista.innerHTML=`
+
+<div class="empty">
+
+<i class="fa fa-film"></i>
+
+<h3>Nenhum conteúdo encontrado</h3>
+
+</div>
+
+`;
+
+return;
+
+}
+
+/* MOSTRAR */
+
+itens.forEach(([id,item])=>{
+
+lista.innerHTML += criarCard(item,id);
+
+});
+
+})
+
+.catch(err=>{
+
+document.getElementById("lista").innerHTML=`
+
+<div class="empty">
+
+<i class="fa fa-circle-exclamation"></i>
+
+<h3>Erro ao carregar</h3>
+
+<p>Verifique sua internet.</p>
+
+</div>
+
+`;
+
+console.log(err);
+
+});
+
+</script>
+
+</body>
+</html>
